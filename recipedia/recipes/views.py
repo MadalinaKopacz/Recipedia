@@ -14,7 +14,7 @@ def get_all_recipes(request):
         "type": "any",
         "app_id": APP_ID,
         "app_key": APP_KEY,
-        "q": "all",
+        "q": "any",
         "random": True,
     }
     r = requests.get(BASE_URL, params=params)
