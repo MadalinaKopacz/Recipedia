@@ -29,6 +29,7 @@ RECIPE_SEARCH_APP_KEY = env("RECIPE_SEARCH_APP_KEY")
 FOOD_APP_ID = env("FOOD_APP_ID")
 FOOD_APP_KEY = env("FOOD_APP_KEY")
 BASE_URL = env("BASE_URL")
+BASE_FOOD_URL = env("BASE_FOOD_URL")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
