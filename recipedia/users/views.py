@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, authenticate, login
 from users.models import User
 from .forms import UserCreateForm
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 
 def create_user_view(request):
@@ -61,3 +63,16 @@ def get_user_details(request):
     context["data"] = request.user
 
     return render(request, "users/user_profile.html", context)
+
+
+@login_required
+def delete_user(request):
+    context = {}
+    object = get_object_or_404(User, username = request.user.username)
+
+    if request.method == "POST":
+        object.delete()
+        return HttpResponseRedirect("/")
+    
+    return render(request, "users/delete_user.html", context)
+
