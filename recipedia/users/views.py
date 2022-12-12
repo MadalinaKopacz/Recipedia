@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import UserCreateForm, LoginForm
+from .forms import UserCreateForm, LoginForm, UpdateUserForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from users.models import User
 from .forms import UserCreateForm
 from django.http import HttpResponseRedirect
@@ -61,7 +62,7 @@ def logout_view(request):
 def get_user_details(request):
     context = {}
     context["data"] = request.user
-
+    print(request.user.favorites)
     return render(request, "users/user_profile.html", context)
 
 
@@ -76,3 +77,37 @@ def delete_user(request):
     
     return render(request, "users/delete_user.html", context)
 
+
+@login_required
+def update_user(request):
+    context = {}
+
+    object = get_object_or_404(User, username = request.user.username)
+
+    form = UpdateUserForm(request.POST or None, instance = object)
+
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("../profile/")
+    
+    context["form"] = form
+    return render(request, "users/update_user.html", context)
+
+
+@login_required
+def change_password(request):
+    context = {}
+
+    form = PasswordChangeForm(user=request.user, data=request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return HttpResponseRedirect("../profile/")
+
+        else:
+            context['error'] = "Passwords don't match."
+    
+    context["form"] = form
+    return render(request, "users/change_password.html", context)
