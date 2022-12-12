@@ -63,6 +63,7 @@ def get_user_details(request):
     context["data"] = request.user
     print(request.user.favorites)
     return render(request, "users/user_profile.html", context)
+<<<<<<< HEAD
 
 
 @login_required
@@ -110,3 +111,5 @@ def change_password(request):
 
     context["form"] = form
     return render(request, "users/change_password.html", context)
+=======
+>>>>>>> development
