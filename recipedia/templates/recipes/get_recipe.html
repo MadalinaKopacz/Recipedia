@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Recipe</title>
+</head>
+<body>
+    <h1>Recipedia</h1>
+    <h2>One recipe</h2>
+    {% if recipe %}
+        <div>
+            <h3>{{ recipe.title }}</h3>
+            <ul>
+                {% for ingredient in recipe.ingredients %}
+                <li>{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p>This recipe is not available.</p>
+    {% endif %}
+</body>
+</html>

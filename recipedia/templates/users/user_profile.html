@@ -1,0 +1,29 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+
+<body>
+    <img src="{{data.profile_picture.url}}" alt="Profile picture" style="width: 180px; border-radius: 10px; margin-left: 1rem; margin-top: 1rem;" />
+    <h5 style="margin-left: 1.2rem;">{{data.first_name}} {{data.last_name}}</h5>
+    <p>{{data.profile_picture.url}}</p>                       
+    <p class="text-muted">{{data.username}}</p>
+    <p class="text-muted"> {{data.email}}</p>
+
+    <h6>Favourite dishes</h6>
+    {% if not data.favorites %}
+        <p> No favourite dishes to display </p>     
+    {% endif %}               
+    <div>
+    {% for key,value in data.favorites.items %}
+        <p class="text-muted"> {{ value }}</p>
+    {% endfor %}
+    </div>
+</body>
+
+</html>
