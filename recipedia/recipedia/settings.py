@@ -125,6 +125,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
 AUTH_USER_MODEL = "users.User"
+AUTHENTICATION_BACKENDS = ['users.backends.AuthenticationBackend']
 
 # Media link to use images in templates
 MEDIA_URL = '/media/'

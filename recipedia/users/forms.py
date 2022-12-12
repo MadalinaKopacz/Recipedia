@@ -11,6 +11,7 @@ class UserCreateForm(UserCreationForm):
         fields = ['username', 'email', 'profile_picture',
                    'password1', 'password2']
 
+
 class LoginForm(forms.Form):
     username = forms.CharField(
         label='',

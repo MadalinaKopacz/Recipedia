@@ -22,6 +22,7 @@ def create_user_view(request):
     context['form'] = form
     return render(request, "users/create_user.html", context)
 
+
 def login_view(request):
     if not request.user.is_anonymous: # Somebody already connected tries to access
         return HttpResponse("Already logged in")
