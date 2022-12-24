@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import UserCreateForm, LoginForm, UpdateUserForm
@@ -7,7 +8,7 @@ from django.contrib.auth import logout, authenticate, login, update_session_auth
 from django.shortcuts import get_object_or_404
 from users.models import User
 from .forms import UserCreateForm
-from django.http import JsonResponse 
+from django.http import JsonResponse
 
 
 def create_user_view(request):
@@ -26,23 +27,36 @@ def create_user_view(request):
     return render(request, "users/create_user.html", context)
 
 
-def loginView(request):
+def login_view(request):
     if not request.user.is_anonymous:  # Somebody already connected tries to access
         return JsonResponse({"status": "failed", "message": "Already logged in."})
 
     if request.method == "POST":
-        username = request.POST.get('username') 
-        password= request.POST.get('password') 
+        data = json.loads(request.body)
+        username = data.get("username")
+        password = data.get("password")
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request=request, user=user)
             return JsonResponse({"status": "success"})
         else:
-            return JsonResponse({"status": "failed", "message": "Login failed."})
-    return JsonResponse({"status": "failed", "message": "Login failed."})
+            return JsonResponse(
+                {
+                    "status": "failed",
+                    "message": "Invalid credentials",
+                },
+                status=400,
+            )
+    return JsonResponse(
+        {
+            "status": "failed",
+            "message": "Invalid request method",
+        },
+        status=400,
+    )
 
 
-def login_view(request):
+def login_view_template(request):
     if not request.user.is_anonymous:  # Somebody already connected tries to access
         return HttpResponse("Already logged in")
 
