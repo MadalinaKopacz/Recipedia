@@ -7,6 +7,7 @@ from django.contrib.auth import logout, authenticate, login, update_session_auth
 from django.shortcuts import get_object_or_404
 from users.models import User
 from .forms import UserCreateForm
+from django.http import JsonResponse 
 
 
 def create_user_view(request):
@@ -23,6 +24,22 @@ def create_user_view(request):
 
     context["form"] = form
     return render(request, "users/create_user.html", context)
+
+
+def loginView(request):
+    if not request.user.is_anonymous:  # Somebody already connected tries to access
+        return JsonResponse({"status": "failed", "message": "Already logged in."})
+
+    if request.method == "POST":
+        username = request.POST.get('username') 
+        password= request.POST.get('password') 
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request=request, user=user)
+            return JsonResponse({"status": "success"})
+        else:
+            return JsonResponse({"status": "failed", "message": "Login failed."})
+    return JsonResponse({"status": "failed", "message": "Login failed."})
 
 
 def login_view(request):
@@ -53,8 +70,6 @@ def logout_view(request):
     logout(request)
     # Redirect to a success page.
     return HttpResponse("Logged out.")
-
-    return render(request, "users/create_user.html", context)
 
 
 @login_required

@@ -1,13 +1,13 @@
-import { Box, Card, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, Grid, Typography } from "@mui/material";
 import StepCard from "./StepCard";
 
 export default function Introduction() {
   return (
     <>
-      <Box justifyContent="center">
+      <Box sx={{mt: "5rem"}} justifyContent="center">
         <img
-          src="media/group1.svg"
-          alt="Group1"
+          src="media/landing-img.svg"
+          alt="Landing"
           height="500"
           style={{
             display: "block",
@@ -15,6 +15,61 @@ export default function Introduction() {
             marginRight: "auto",
           }}
         />
+
+        {/* TO-DO: display buttons on top of image*/}
+        <Box sx={{
+          display: "flex",
+          zIndex: 'modal',
+          alignItems: "center",
+          justifyContent: "center",
+          ml: "5rem"}} >
+          <Button
+            sx={{
+              my: 2,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+            style={{
+              width: "132px",
+              height: "66px",
+              color: "#1C7054",
+              backgroundColor: "#E5E5E5",
+              borderRadius: 30,
+              textTransform: "none",
+              fontFamily: "'Roboto'",
+              fontSize: "20px",
+              fontWeight: 700,
+              marginRight: 30,
+            }}
+          >
+            Try now
+          </Button>
+          <Button
+            sx={{
+              my: 2,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+            style={{
+              width: "160px",
+              height: "66px",
+              color: "#1C7054",
+              backgroundColor: "#E5E5E5",
+              borderRadius: 30,
+              textTransform: "none",
+              fontFamily: "'Roboto'",
+              fontSize: "20px",
+              fontWeight: 700,
+              marginRight: 30,
+            }}
+          >
+            Get an account
+          </Button>
+        </Box>
       </Box>
 
       <Box
@@ -31,7 +86,7 @@ export default function Introduction() {
           sx={{
             mr: 2,
             display: { md: "flex" },
-            fontFamily: "fantasy",
+            fontFamily: "Playfair",
             fontWeight: 700,
             color: "#383535",
             textDecoration: "none",
@@ -47,7 +102,7 @@ export default function Introduction() {
           sx={{
             mr: 2,
             display: { md: "flex" },
-            fontFamily: "fantasy",
+            fontFamily: "Playfair",
             fontWeight: 700,
             color: "#DD0426",
             textDecoration: "none",
@@ -59,6 +114,7 @@ export default function Introduction() {
           are out of inspiration
         </Typography>
       </Box>
+      
       <Grid
         container
         spacing={3}
