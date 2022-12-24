@@ -9,6 +9,11 @@ from django.shortcuts import get_object_or_404
 from users.models import User
 from .forms import UserCreateForm
 from django.http import JsonResponse
+import secrets
+from tokens.models import Token
+from datetime import timedelta
+from django.utils import timezone
+from .decorators import custom_login_required
 
 
 def create_user_view(request):
@@ -38,7 +43,12 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request=request, user=user)
-            return JsonResponse({"status": "success"})
+            token = Token.objects.create(
+                value=secrets.token_hex(32),
+                user=user,
+                expired_at=timezone.now() + timedelta(days=7),
+            )
+            return JsonResponse({"status": "success", "token": token.value})
         else:
             return JsonResponse(
                 {
@@ -79,14 +89,7 @@ def login_view_template(request):
     return render(request, "users/login.html", context)
 
 
-@login_required
-def logout_view(request):
-    logout(request)
-    # Redirect to a success page.
-    return HttpResponse("Logged out.")
-
-
-@login_required
+@custom_login_required
 def get_user_details(request):
     context = {}
     context["data"] = request.user
@@ -94,7 +97,7 @@ def get_user_details(request):
     return render(request, "users/user_profile.html", context)
 
 
-@login_required
+@custom_login_required
 def delete_user(request):
     context = {}
     object = get_object_or_404(User, username=request.user.username)
@@ -106,7 +109,7 @@ def delete_user(request):
     return render(request, "users/delete_user.html", context)
 
 
-@login_required
+@custom_login_required
 def update_user(request):
     context = {}
 
@@ -122,7 +125,7 @@ def update_user(request):
     return render(request, "users/update_user.html", context)
 
 
-@login_required
+@custom_login_required
 def change_password(request):
     context = {}
 
