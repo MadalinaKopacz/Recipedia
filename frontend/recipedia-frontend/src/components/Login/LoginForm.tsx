@@ -5,20 +5,21 @@ import { useState } from "react";
 export default function LoginForm() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     axios
       .post("http://localhost:8000/user/login/", { username, password })
       .then((response) => {
-        console.log("response");
-        if (response.data.status === "failed") {
-          alert("Failed login");
-        } else {
+          localStorage.setItem('userToken', response.data.token);
           alert("Logged in");
-        }
       })
-      .catch((errors) => console.log("errors"));
+      .catch((errors) => {
+        setErrorMessage(errors.response.data.message);
+        console.log(errors);
+      }
+      );
   };
 
   return (
@@ -111,7 +112,28 @@ export default function LoginForm() {
         >
           Login
         </Button>
+        <Box height={"30px"}>
+        {errorMessage != "" &&
+            <Typography
+              sx={{
+                mr: 2,
+                display: { md: "flex" },
+                fontFamily: "Playfair",
+                fontWeight: 700,
+                color: "#dd0426",
+                textDecoration: "none",
+                textAlign: "center",
+                margin: "auto",
+                marginBottom: "-2.5rem",
+                width: "65%",
+              }}
+            >
+              {errorMessage}
+            </Typography>
+        }
+
+        </Box>
       </Box>
-    </Box>
+    </Box >
   );
 }

@@ -32,7 +32,7 @@ export default function StepCard(props: RecipeInfo) {
         />
         <Typography
           sx={{
-            fontFamily: "fantasy",
+            fontFamily: "Playfair",
             fontWeight: 700,
             color: "#383535",
             marginX: 4,
@@ -45,7 +45,7 @@ export default function StepCard(props: RecipeInfo) {
         </Typography>
         <Typography
           sx={{
-            fontFamily: "fantasy",
+            fontFamily: "Roboto",
             fontWeight: 700,
             color: "#383535",
             textDecoration: "none",

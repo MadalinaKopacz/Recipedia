@@ -4,7 +4,7 @@
 }
 
 body {
-  margin:0;
+  margin: 0;
   background-color: #EFE2D3;
   font-family: 'Playfair';
 }
@@ -13,8 +13,21 @@ body {
   display: block
 }
 
+.register-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 2fr ;
+  grid-column-gap: 2rem;
+  grid-row-gap: 2rem;
+}
+
 @media screen and (max-width: 768px) {
   .desktop-only {
     display: none
   }
+  .register-grid {
+    display: flex;
+    flex-direction: column;
+  }
 }
+

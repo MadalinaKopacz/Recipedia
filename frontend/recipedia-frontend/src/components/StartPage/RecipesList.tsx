@@ -62,7 +62,7 @@ export default function RecipesList() {
           sx={{
             mr: 2,
             display: { md: "flex" },
-            fontFamily: "fantasy",
+            fontFamily: "Playfair",
             fontWeight: 700,
             color: "#383535",
             textDecoration: "none",

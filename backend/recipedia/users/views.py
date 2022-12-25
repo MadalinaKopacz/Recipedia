@@ -31,6 +31,101 @@ def create_user_view(request):
     context["form"] = form
     return render(request, "users/create_user.html", context)
 
+def create_user(request):
+    if not request.user.is_anonymous:  # Somebody already connected tries to access
+        return JsonResponse(
+            {
+                "status": "failed",
+                "message": "User is logged in.",
+            },
+            status=400,
+        )
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+        first_name = data.get("firstname")
+        last_name = data.get("lastname")
+        username = data.get("username")
+        email = data.get("email")
+        password1 = data.get("password1")
+        password2 = data.get("password2")
+        profile_pic = data.get("profilepic")
+
+        if password1 != password2:
+            return JsonResponse(
+                {
+                    "status": "failed",
+                    "message": "Passwords don't match",
+                },
+                status=400,
+            )
+        
+
+        user = User.objects.create_user(username, email, password1, first_name, last_name, profile_pic)
+
+        if user is not None:
+            login(request=request, user=user)
+            token = Token.objects.create(
+                value=secrets.token_hex(32),
+                user=user,
+                expired_at=timezone.now() + timedelta(days=7),
+            )
+            return JsonResponse({"status": "success", "token": token.value})
+        else:
+            return JsonResponse(
+                {
+                    "status": "failed",
+                    "message": "Invalid credentials",
+                },
+                status=400,
+            )
+    return JsonResponse(
+        {
+            "status": "failed",
+            "message": "Invalid request method",
+        },
+        status=400,
+    )
+
+
+def loginView(request):
+    if not request.user.is_anonymous:  # Somebody already connected tries to access
+         return JsonResponse(
+            {
+                "status": "failed",
+                "message": "User is logged in.",
+            },
+            status=400,
+        )
+
+    if request.method == "POST":
+        username = request.POST.get('username') 
+        password= request.POST.get('password') 
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request=request, user=user)
+            token = Token.objects.create(
+                value=secrets.token_hex(32),
+                user=user,
+                expired_at=timezone.now() + timedelta(days=7),
+            )
+            return JsonResponse({"status": "success", "token": token.value})
+        else:
+            return JsonResponse(
+            {
+                "status": "failed",
+                "message": "Login failed.",
+            },
+            status=400,
+        )
+    return JsonResponse(
+            {
+                "status": "failed",
+                "message": "User is logged in.",
+            },
+            status=400,
+    )
+
 
 def login_view(request):
     if not request.user.is_anonymous:  # Somebody already connected tries to access

@@ -88,12 +88,33 @@ function ResponsiveAppBar() {
               backgroundColor: "#FFD9A1",
               borderRadius: 10,
               textTransform: "none",
-              fontFamily: "Playfair",
+              fontFamily: "Roboto",
               fontWeight: "bold",
               marginRight: 30,
             }}
           >
             Log In
+          </Button>
+        </Box>
+
+        <Box sx={{ flexGrow: 0 }}>
+          <Button
+            href="/register"
+            sx={{
+              my: 2,
+              display: "block",
+            }}
+            style={{
+              color: "#FFD9A1",
+              backgroundColor: "#DD0426",
+              borderRadius: 10,
+              textTransform: "none",
+              fontFamily: "Roboto",
+              fontWeight: "bold",
+              marginRight: 30,
+            }}
+          >
+            Register
           </Button>
         </Box>
       </Toolbar>
