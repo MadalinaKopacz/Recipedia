@@ -39,7 +39,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar style={{ width:"100%", backgroundColor: "#383535" }}>
+    <AppBar style={{ width: "100%", backgroundColor: "#383535" }}>
       <Toolbar disableGutters sx={{ height: 70 }}>
         <Typography
           variant="h6"
@@ -57,9 +57,15 @@ function ResponsiveAppBar() {
         >
           Recipedia
         </Typography>
-        <img src="media/small-logo.svg" alt="Recipedia logo" style={{ width: "3rem"}}/>
+        <img
+          src="media/small-logo.svg"
+          alt="Recipedia logo"
+          style={{ width: "3rem" }}
+        />
 
-        <Box sx={{ ml: "2%", flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+        <Box
+          sx={{ ml: "2%", flexGrow: 1, display: { xs: "none", md: "flex" } }}
+        >
           {pages.map((page) => (
             <Button
               key={page}
@@ -68,7 +74,7 @@ function ResponsiveAppBar() {
                 borderRadius: 10,
                 fontFamily: "'Roboto'",
                 fontWeight: 700,
-                fontSize: "1srem"
+                fontSize: "1srem",
               }}
             >
               {page}
