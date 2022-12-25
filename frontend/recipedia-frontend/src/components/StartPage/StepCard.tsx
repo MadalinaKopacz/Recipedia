@@ -7,7 +7,7 @@ interface Content {
 
 export default function StepCard(props: Content) {
   return (
-    <Grid item xs={2} textAlign={"center"} minWidth={240}>
+    <Grid item xs={2} textAlign={"center"} minWidth={350}>
       <Paper sx={{ height: 300, borderRadius: 5, paddingX: 2 }} elevation={8}>
         <Typography
           sx={{

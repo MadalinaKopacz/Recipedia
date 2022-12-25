@@ -1,19 +1,12 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
 
-const pages = ["Home", "Recipes", "About Us"];
+const pages = ["Home", " Get Recipes", "About Us"];
+const routes = ["/", "/ingredients", "/aboutUs"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -66,9 +59,10 @@ function ResponsiveAppBar() {
         <Box
           sx={{ ml: "2%", flexGrow: 1, display: { xs: "none", md: "flex" } }}
         >
-          {pages.map((page) => (
+          {pages.map((page, index) => (
             <Button
               key={page}
+              href={routes[index]}
               style={{
                 color: "white",
                 borderRadius: 10,
@@ -84,6 +78,7 @@ function ResponsiveAppBar() {
 
         <Box sx={{ flexGrow: 0 }}>
           <Button
+            href="/login"
             sx={{
               my: 2,
               display: "block",
