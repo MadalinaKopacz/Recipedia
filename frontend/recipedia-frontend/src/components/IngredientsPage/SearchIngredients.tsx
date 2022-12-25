@@ -84,14 +84,15 @@ export default function SearchIngredients() {
     return(
         <>
         <Grid container
-            sx={{marginLeft: "auto",
+            sx={{
+                 marginTop: 10,
+                 marginLeft: "auto",
                  marginRight: "auto",
                  width: '90%'}}
             spacing={0}>
             <Grid item xs={12}> 
                 <Typography
                     sx={{
-                    fontFamily: "fantasy",
                     fontWeight: 700,
                     color: "#383535",
                     textDecoration: "none",
@@ -107,7 +108,7 @@ export default function SearchIngredients() {
                 <Grid item xs={11}>
                     <TextField 
                         id="outlined-basic" 
-                        label="Ingregients" 
+                        label="Ingredients" 
                         variant="outlined"
                         inputProps={{style: {fontSize: 18}}}
                         sx={{width: '100%',
@@ -128,6 +129,9 @@ export default function SearchIngredients() {
                              height:'90%',
                              width: '80%',
                              background: '#383535',
+                             fontSize: 16,
+                             opacity: "80%",
+                             fontWeight: "bold",
                              "&:hover": {
                                 backgroundColor: "#BEBEBE !important",
                                 color: "black"
@@ -139,6 +143,7 @@ export default function SearchIngredients() {
                     <Stack 
                         spacing={0} 
                         sx={{
+                            visibility: ingSuggestions.length > 0 ? "visible" : "hidden",
                             borderRadius: 2,
                             minHeight: 210,
                             background: "#EDEDED",

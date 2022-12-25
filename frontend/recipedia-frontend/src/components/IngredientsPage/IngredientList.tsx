@@ -18,7 +18,7 @@ export default function SearchIngredients({ingredients=[""]}) {
                     paddingTop: 7,
                     textAlign: "center"
                     }}>
-                Use the search bar to add the ingredients you already have to browse for recepies
+                Use the search bar to add the ingredients you already have to browse for recipes
                 </Typography>
             : <Grid container sx={{padding: 2, height: "80%"}}>
                 {ings.map((ingredient) => 
