@@ -17,6 +17,9 @@ export default function StepCard(props: RecipeInfo) {
           borderRadius: 5,
           marginTop: 5,
           marginX: 5,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
         }}
         elevation={8}
       >
@@ -32,9 +35,9 @@ export default function StepCard(props: RecipeInfo) {
             fontFamily: "fantasy",
             fontWeight: 700,
             color: "#383535",
-            textDecoration: "none",
-            margin: "auto",
-            paddingTop: 5,
+            marginX: 4,
+            flex: 1,
+            paddingTop: 3,
           }}
           variant="h4"
         >
@@ -46,12 +49,15 @@ export default function StepCard(props: RecipeInfo) {
             fontWeight: 700,
             color: "#383535",
             textDecoration: "none",
-            margin: "auto",
-            paddingTop: 5,
+            marginX: 4,
+            paddingTop: 2,
+            paddingBottom: 3,
+            borderTop: "1px solid #000",
           }}
-          variant="h4"
+          variant="h5"
         >
-          {props.dishType[0]}
+          {props.dishType && props.dishType[0] ? "Category: " : ""}
+          {props.dishType && props.dishType[0] ? props.dishType[0] : ""}
         </Typography>
       </Card>
     </Grid>

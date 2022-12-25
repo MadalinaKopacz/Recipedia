@@ -1,19 +1,12 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
 
-const pages = ["Home", "Recipes", "About Us"];
+const pages = ["Home", " Get Recipes", "About Us"];
+const routes = ["/", "/ingredients", "/aboutUs"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -39,7 +32,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar style={{ width:"100%", backgroundColor: "#383535" }}>
+    <AppBar style={{ width: "100%", backgroundColor: "#383535" }}>
       <Toolbar disableGutters sx={{ height: 70 }}>
         <Typography
           variant="h6"
@@ -57,18 +50,25 @@ function ResponsiveAppBar() {
         >
           Recipedia
         </Typography>
-        <img src="media/small-logo.svg" alt="Recipedia logo" style={{ width: "3rem"}}/>
+        <img
+          src="media/small-logo.svg"
+          alt="Recipedia logo"
+          style={{ width: "3rem" }}
+        />
 
-        <Box sx={{ ml: "2%", flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-          {pages.map((page) => (
+        <Box
+          sx={{ ml: "2%", flexGrow: 1, display: { xs: "none", md: "flex" } }}
+        >
+          {pages.map((page, index) => (
             <Button
               key={page}
+              href={routes[index]}
               style={{
                 color: "white",
                 borderRadius: 10,
                 fontFamily: "'Roboto'",
                 fontWeight: 700,
-                fontSize: "1srem"
+                fontSize: "1srem",
               }}
             >
               {page}
@@ -78,6 +78,7 @@ function ResponsiveAppBar() {
 
         <Box sx={{ flexGrow: 0 }}>
           <Button
+            href="/login"
             sx={{
               my: 2,
               display: "block",
