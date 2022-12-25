@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import UserCreateForm, LoginForm, UpdateUserForm
@@ -7,6 +8,12 @@ from django.contrib.auth import logout, authenticate, login, update_session_auth
 from django.shortcuts import get_object_or_404
 from users.models import User
 from .forms import UserCreateForm
+from django.http import JsonResponse
+import secrets
+from tokens.models import Token
+from datetime import timedelta
+from django.utils import timezone
+from .decorators import custom_login_required
 
 
 def create_user_view(request):
@@ -26,6 +33,40 @@ def create_user_view(request):
 
 
 def login_view(request):
+    if not request.user.is_anonymous:  # Somebody already connected tries to access
+        return JsonResponse({"status": "failed", "message": "Already logged in."})
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data.get("username")
+        password = data.get("password")
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request=request, user=user)
+            token = Token.objects.create(
+                value=secrets.token_hex(32),
+                user=user,
+                expired_at=timezone.now() + timedelta(days=7),
+            )
+            return JsonResponse({"status": "success", "token": token.value})
+        else:
+            return JsonResponse(
+                {
+                    "status": "failed",
+                    "message": "Invalid credentials",
+                },
+                status=400,
+            )
+    return JsonResponse(
+        {
+            "status": "failed",
+            "message": "Invalid request method",
+        },
+        status=400,
+    )
+
+
+def login_view_template(request):
     if not request.user.is_anonymous:  # Somebody already connected tries to access
         return HttpResponse("Already logged in")
 
@@ -48,16 +89,7 @@ def login_view(request):
     return render(request, "users/login.html", context)
 
 
-@login_required
-def logout_view(request):
-    logout(request)
-    # Redirect to a success page.
-    return HttpResponse("Logged out.")
-
-    return render(request, "users/create_user.html", context)
-
-
-@login_required
+@custom_login_required
 def get_user_details(request):
     context = {}
     context["data"] = request.user
@@ -65,7 +97,7 @@ def get_user_details(request):
     return render(request, "users/user_profile.html", context)
 
 
-@login_required
+@custom_login_required
 def delete_user(request):
     context = {}
     object = get_object_or_404(User, username=request.user.username)
@@ -77,7 +109,7 @@ def delete_user(request):
     return render(request, "users/delete_user.html", context)
 
 
-@login_required
+@custom_login_required
 def update_user(request):
     context = {}
 
@@ -93,7 +125,7 @@ def update_user(request):
     return render(request, "users/update_user.html", context)
 
 
-@login_required
+@custom_login_required
 def change_password(request):
     context = {}
 

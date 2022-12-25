@@ -1,3 +1,20 @@
+@font-face {
+  font-family: 'Playfair';
+  src: local('src/fonts/Playfair_Display'), url(./fonts/Playfair_Display/PlayfairDisplay-Regular.ttf) format('opentype');
+}
+
 body {
-    background-color: #EFE2D3;
+  margin:0;
+  background-color: #EFE2D3;
+  font-family: 'Playfair';
+}
+
+.desktop-only {
+  display: block
+}
+
+@media screen and (max-width: 768px) {
+  .desktop-only {
+    display: none
   }
+}
