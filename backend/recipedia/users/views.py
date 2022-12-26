@@ -59,6 +59,16 @@ def create_user(request):
                 },
                 status=400,
             )
+
+        if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists() :
+            return JsonResponse(
+                {
+                    "status": "failed",
+                    "message": "Failed to create account.",
+                },
+                status=400,
+            )
+        
         
 
         user = User.objects.create_user(username, email, password1, first_name, last_name, profile_pic)
@@ -75,7 +85,7 @@ def create_user(request):
             return JsonResponse(
                 {
                     "status": "failed",
-                    "message": "Invalid credentials",
+                    "message": "Failed to create account.",
                 },
                 status=400,
             )
