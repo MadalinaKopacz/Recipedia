@@ -231,6 +231,26 @@ def update_user(request):
 
 
 @custom_login_required
+def edit_favorites(request):
+    user: User = request.user
+    favorites: list = user.favorites
+
+    info = json.loads(request.body)
+
+    if info["command"] == "add":
+            if info["recipe"] not in favorites:
+                favorites.append(info["recipe"])
+    elif info["command"] == "remove":
+            if info["recipe"] in favorites:
+                favorites.remove(info["recipe"])
+    
+    user.favorites = favorites
+    user.save()
+
+    return HttpResponse(200)
+
+    
+@custom_login_required
 def change_password(request):
     context = {}
 
