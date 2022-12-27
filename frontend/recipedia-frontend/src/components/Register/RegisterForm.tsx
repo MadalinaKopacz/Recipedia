@@ -13,15 +13,38 @@ export default function RegisterForm() {
     const [profilepic, setProfilePic] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
 
+    const emailRegex = new RegExp("^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z{|}~])*@[a-zA-Z](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$");
+    const passwordRegex = new RegExp("^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$");
+
+    let correctMail = false;
+    let correctFname = false;
+    let correctLname = false;
+    let correctPassword = false;
+
+
+    const handleEmailChange = (e: any) => {
+        setEmail(e.target.value);
+        correctMail = emailRegex.test(email);
+
+    }
+
     const handleChangePhoto = (e: any) => {
         setProfilePic(URL.createObjectURL(e.target.files[0]));
         console.log(profilepic);
     }
-  
+
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        
+
+        if (!emailRegex.test(email)) {
+            setErrorMessage("Email is incorrect.");
+            return;
+        } else if (!passwordRegex.test(password1)) {
+            setErrorMessage("Password should have minimum 8 characters, at least one letter and one number.");
+            return;
+        }
+
         axios
             .post("http://localhost:8000/user/register/",
                 {
@@ -129,7 +152,7 @@ export default function RegisterForm() {
                         fullWidth={true}
                         name="email"
                         value={email}
-                        onChange={e => setEmail(e.target.value)}
+                        onChange={handleEmailChange}
                     />
                 </FormControl >
                 <FormControl sx={{ padding: 2, width: "100%" }}>
@@ -137,7 +160,7 @@ export default function RegisterForm() {
                         required
                         id="password1"
                         type="password"
-                        label="Password1"
+                        label="Enter your password"
                         placeholder="Your password"
                         variant="outlined"
                         fullWidth={true}
@@ -151,7 +174,7 @@ export default function RegisterForm() {
                         required
                         id="password2"
                         type="password"
-                        label="Password2"
+                        label="Enter your password again"
                         placeholder="Your password"
                         variant="outlined"
                         fullWidth={true}
@@ -215,6 +238,25 @@ export default function RegisterForm() {
                     >
                         Register
                     </Button>
+
+                    <Box height={"4rem"} display="flex" alignItems="center" padding="16px">
+                        {errorMessage != "" &&
+                            <Typography
+                                sx={{
+                                    display: { md: "flex" },
+                                    fontFamily: "Playfair",
+                                    fontWeight: 700,
+                                    color: "#dd0426",
+                                    textDecoration: "none",
+                                    margin: "auto",
+                                    fontSize: "0.8rem"
+                                }}
+                            >
+                                {errorMessage}
+                            </Typography>
+                        }
+
+                    </Box>
                 </Box>
             </Box>
 
