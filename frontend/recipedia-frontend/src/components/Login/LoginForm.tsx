@@ -12,14 +12,17 @@ export default function LoginForm() {
     axios
       .post("http://localhost:8000/user/login/", { username, password })
       .then((response) => {
-          localStorage.setItem('userToken', response.data.token);
+        if (response.data.status === "failed") {
+          alert("Failed login");
+        } else {
+          localStorage.setItem("userToken", response.data.token);
           alert("Logged in");
+        }
       })
       .catch((errors) => {
         setErrorMessage(errors.response.data.message);
         console.log(errors);
-      }
-      );
+      });
   };
 
   return (
@@ -113,7 +116,7 @@ export default function LoginForm() {
           Login
         </Button>
         <Box height={"30px"}>
-        {errorMessage != "" &&
+          {errorMessage != "" && (
             <Typography
               sx={{
                 mr: 2,
@@ -130,10 +133,9 @@ export default function LoginForm() {
             >
               {errorMessage}
             </Typography>
-        }
-
+          )}
         </Box>
       </Box>
-    </Box >
+    </Box>
   );
 }

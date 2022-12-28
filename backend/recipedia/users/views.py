@@ -6,6 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.shortcuts import get_object_or_404
+from django.core import serializers
 from users.models import User
 from .forms import UserCreateForm
 from django.http import JsonResponse
@@ -30,6 +31,7 @@ def create_user_view(request):
 
     context["form"] = form
     return render(request, "users/create_user.html", context)
+
 
 def create_user(request):
     if not request.user.is_anonymous:  # Somebody already connected tries to access
@@ -60,7 +62,10 @@ def create_user(request):
                 status=400,
             )
 
-        if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists() :
+        if (
+            User.objects.filter(username=username).exists()
+            or User.objects.filter(email=email).exists()
+        ):
             return JsonResponse(
                 {
                     "status": "failed",
@@ -68,10 +73,10 @@ def create_user(request):
                 },
                 status=400,
             )
-        
-        
 
-        user = User.objects.create_user(username, email, password1, first_name, last_name, profile_pic)
+        user = User.objects.create_user(
+            username, email, password1, first_name, last_name, profile_pic
+        )
 
         if user is not None:
             login(request=request, user=user)
@@ -100,7 +105,7 @@ def create_user(request):
 
 def loginView(request):
     if not request.user.is_anonymous:  # Somebody already connected tries to access
-         return JsonResponse(
+        return JsonResponse(
             {
                 "status": "failed",
                 "message": "User is logged in.",
@@ -109,8 +114,8 @@ def loginView(request):
         )
 
     if request.method == "POST":
-        username = request.POST.get('username') 
-        password= request.POST.get('password') 
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request=request, user=user)
@@ -122,18 +127,18 @@ def loginView(request):
             return JsonResponse({"status": "success", "token": token.value})
         else:
             return JsonResponse(
-            {
-                "status": "failed",
-                "message": "Login failed.",
-            },
-            status=400,
-        )
+                {
+                    "status": "failed",
+                    "message": "Login failed.",
+                },
+                status=400,
+            )
     return JsonResponse(
-            {
-                "status": "failed",
-                "message": "User is logged in.",
-            },
-            status=400,
+        {
+            "status": "failed",
+            "message": "User is logged in.",
+        },
+        status=400,
     )
 
 
@@ -197,9 +202,10 @@ def login_view_template(request):
 @custom_login_required
 def get_user_details(request):
     context = {}
-    context["data"] = request.user
-    print(request.user.favorites)
-    return render(request, "users/user_profile.html", context)
+    user = serializers.serialize("json", [request.user])
+    context["user"] = user
+    # print(user)
+    return JsonResponse(context)
 
 
 @custom_login_required
@@ -231,25 +237,51 @@ def update_user(request):
 
 
 @custom_login_required
+def update_preferences(request):
+    user: User = request.user
+    print(user.preference_diet, user.preference_health)
+    prefs = json.loads(request.body)["prefs"]
+
+    user.preference_health = prefs["healthTags"]
+    user.preference_diet = prefs["dietTags"]
+    print(user.preference_diet, user.preference_health)
+    user.save()
+    return HttpResponse(200)
+
+
+@custom_login_required
 def edit_favorites(request):
     user: User = request.user
     favorites: list = user.favorites
+    if not favorites:
+        favorites = []
 
     info = json.loads(request.body)
 
-    if info["command"] == "add":
-            if info["recipe"] not in favorites:
-                favorites.append(info["recipe"])
-    elif info["command"] == "remove":
-            if info["recipe"] in favorites:
-                favorites.remove(info["recipe"])
-    
+    if not info:
+        return JsonResponse(
+            {
+                "status": "failed",
+                "message": "Missing data",
+            },
+            status=400,
+        )
+    if info["command"] == "add" and info["recipe"] not in favorites:
+        favorites.append(info["recipe"])
+    elif info["command"] == "remove" and info["recipe"] in favorites:
+        favorites.remove(info["recipe"])
+
     user.favorites = favorites
     user.save()
 
-    return HttpResponse(200)
+    return JsonResponse(
+        {
+            "status": "success",
+        },
+        status=200,
+    )
 
-    
+
 @custom_login_required
 def change_password(request):
     context = {}

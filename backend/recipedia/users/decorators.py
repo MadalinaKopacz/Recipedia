@@ -9,7 +9,7 @@ from django.utils import timezone
 def custom_login_required(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
-        token = request.headers.get("token")
+        token = request.headers.get("Authorization")
         if not token:
             return JsonResponse({"error": "Token required"}, status=400)
         try:
