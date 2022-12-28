@@ -4,7 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .forms import UserCreateForm, LoginForm, UpdateUserForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
+from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth import logout as django_logout
 from django.shortcuts import get_object_or_404
 from django.core import serializers
 from users.models import User
@@ -79,13 +80,7 @@ def create_user(request):
         )
 
         if user is not None:
-            login(request=request, user=user)
-            token = Token.objects.create(
-                value=secrets.token_hex(32),
-                user=user,
-                expired_at=timezone.now() + timedelta(days=7),
-            )
-            return JsonResponse({"status": "success", "token": token.value})
+            return JsonResponse({"status": "success"})
         else:
             return JsonResponse(
                 {
@@ -174,6 +169,16 @@ def login_view(request):
         },
         status=400,
     )
+
+
+@custom_login_required
+def logout(request):
+    if request.method == "POST":
+        django_logout(request=request)
+        return JsonResponse({"status": "success"})
+    
+    return JsonResponse({"status": "failed",}, status=400)
+
 
 
 def login_view_template(request):
