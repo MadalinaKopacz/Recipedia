@@ -85,9 +85,9 @@ export default function UserProfile() {
       .then((resp) => JSON.parse(resp.data.user)[0].fields)
       .then((userData) => {
         setUser(userData);
-        setDietTags(userData?.preference_diet);
-        setHealthTags(userData?.preference_health);
-        setFavRecipes(userData?.favorites);
+        if (userData?.preference_diet != null) setDietTags(userData?.preference_diet);
+        if (userData?.preference_health != null) setHealthTags(userData?.preference_health);
+        if (userData?.favorites != null) setFavRecipes(userData?.favorites);
         if (userData?.profile_picture) {
           setProfilePicture(
             "http://localhost:8000/media/" + userData?.profile_picture

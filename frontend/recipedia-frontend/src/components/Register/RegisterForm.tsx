@@ -10,6 +10,7 @@ import {
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterForm() {
   const [fname, setFname] = useState<string>("");
@@ -20,6 +21,7 @@ export default function RegisterForm() {
   const [password2, setPassword2] = useState<string>("");
   const [profilepic, setProfilePic] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const navigate = useNavigate();
 
   const emailRegex = new RegExp(
     /^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](.?[-!#$%&'*+/0-9=?A-Z^_a-z{|}~])*@[a-zA-Z](-?[a-zA-Z0-9])*(.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
@@ -49,6 +51,7 @@ export default function RegisterForm() {
       return;
     } else if (password1 !== password2) {
       setErrorMessage("Your passwords do not match.");
+      return;
     } else if (!passwordRegex.test(password1)) {
       setErrorMessage(
         "The password should have minimum 8 characters, at least one uppercase letter, one lowercase letter and one number."
@@ -67,13 +70,11 @@ export default function RegisterForm() {
         profilepic: profilepic,
       })
       .then((response) => {
-        localStorage.setItem("userToken", response.data.token);
-        console.log(response);
-        alert("Logged in");
+        setErrorMessage("");
+        navigate("/login");
       })
       .catch((errors) => {
         setErrorMessage(errors.response.data.message);
-        console.log(errors);
       });
   };
 

@@ -1,23 +1,21 @@
 import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     axios
       .post("http://localhost:8000/user/login/", { username, password })
       .then((response) => {
-        if (response.data.status === "failed") {
-          alert("Failed login");
-        } else {
           localStorage.setItem("userToken", response.data.token);
-          alert("Logged in");
-        }
+          navigate('/');
       })
       .catch((errors) => {
         setErrorMessage(errors.response.data.message);
