@@ -1,18 +1,110 @@
-import { Box, Card, Grid, Typography } from "@mui/material";
+import { Box, Card, Grid, Link, Modal, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Recipe } from "../../DTOs";
+import { Recipe, User } from "../../DTOs";
 
 interface RecipeInfo {
   label: string;
   image: string;
   dishType: [string];
   categories: [string];
+  recipe: Recipe;
 }
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  backgroundColor: "#EFE2D3",
+  boxShadow: 24,
+  p: 4,
+  outline: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: "15px",
+};
 
-export default function StepCard(props: RecipeInfo) {
+export default function RecipeCard(props: RecipeInfo) {
   const userToken = localStorage.getItem("userToken");
-  const [favRecipes, setFavRecipes] = useState<RecipeInfo[]>([]);
+  const [user, setUser] = useState<User>();
+  const [favRecipes, setFavRecipes] = useState<Recipe[]>([]);
+  const [open, setOpen] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const addFavorite = () => {
+    setIsFavorite(true);
+    axios
+      .post(
+        "http://localhost:8000/user/update_favorites/",
+        { command: "add", recipe: props.recipe },
+        {
+          headers: {
+            Authorization: userToken,
+          },
+        }
+      )
+      .then((resp) => {})
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const removeFavorite = () => {
+    setIsFavorite(false);
+    axios
+      .post(
+        "http://localhost:8000/user/update_favorites/",
+        { command: "remove", recipe: props.recipe },
+        {
+          headers: {
+            Authorization: userToken,
+          },
+        }
+      )
+      .then((resp) => {})
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleFavoriteOnClick = () => {
+    setOpen(true);
+  };
+
+  const handleFavsLoggedInUser = () => {
+    if (isFavorite) {
+      return (
+        <img
+          src="media/favorite-heart-red.svg"
+          alt="favorite-heart-red"
+          onClick={removeFavorite}
+        />
+      );
+    } else {
+      return (
+        <img
+          src="media/not-favorite-heart-red.svg"
+          alt="not-favorite-heart-red"
+          onClick={addFavorite}
+        />
+      );
+    }
+  };
+  const handleFavsNotLoggedInUser = () => {
+    return (
+      <img
+        src="media/not-favorite-heart-red.svg"
+        alt="not-favorite-heart-red"
+        onClick={handleFavoriteOnClick}
+      />
+    );
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     axios
@@ -23,12 +115,24 @@ export default function StepCard(props: RecipeInfo) {
       })
       .then((resp) => JSON.parse(resp.data.user)[0].fields)
       .then((userData) => {
+        setUser(userData);
         setFavRecipes(userData?.favorites);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [userToken]);
+
+  useEffect(() => {
+    console.log({ favRecipes });
+    if (favRecipes) {
+      for (let i = 0; i < favRecipes.length; i++) {
+        if (favRecipes[i].recipe.label === props.label) {
+          setIsFavorite(true);
+        }
+      }
+    }
+  }, [userToken, favRecipes, props.label]);
 
   return (
     <Grid item xs={3} textAlign={"center"} minWidth={450}>
@@ -97,15 +201,17 @@ export default function StepCard(props: RecipeInfo) {
               marginRight: 2,
             }}
           >
-            {/* {user ? (
-                      <img src="media/favorite-heart.svg" alt="not-favorite-heart" onClick={handleFavoriteOnClick}/>
-                      ))
-                     : (
-                      <Typography sx={{ fontSize: 18, opacity: 0.6 }}>
-                        No favorite recipes.
-                      </Typography>
-                    )} */}
-            <img src="media/favorite-heart-red.svg" alt="not-favorite-heart" />
+            <div>
+              {user ? handleFavsLoggedInUser() : handleFavsNotLoggedInUser()}
+              <Modal open={open} onClose={handleClose}>
+                <Box sx={style}>
+                  <Typography sx={{ fontFamily: "Playfair" }}>
+                    To add favorites, please <Link href="/login">log in</Link>{" "}
+                    or <Link href="/register">register</Link>.
+                  </Typography>
+                </Box>
+              </Modal>
+            </div>
           </Grid>
         </Grid>
       </Card>

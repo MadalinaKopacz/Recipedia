@@ -10,16 +10,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { User } from "../../DTOs";
+import { User, Recipe } from "../../DTOs";
 import ENV from "../../env";
 import RecipeCard from "../StartPage/RecipeCard";
-
-interface RecipeInfo {
-  label: string;
-  image: string;
-  dishType: [string];
-  categories: [string];
-}
 
 const healthPrefs = [
   "alcohol-cocktail",
@@ -71,7 +64,7 @@ export default function UserProfile() {
   const userToken = localStorage.getItem("userToken");
   const [user, setUser] = useState<User>();
   const [profilePicture, setProfilePicture] = useState<string>("");
-  const [favRecipes, setFavRecipes] = useState<RecipeInfo[]>([]);
+  const [favRecipes, setFavRecipes] = useState<Recipe[]>([]);
   const [healthTags, setHealthTags] = useState<string[]>([]);
   const [dietTags, setDietTags] = useState<string[]>([]);
 
@@ -85,8 +78,10 @@ export default function UserProfile() {
       .then((resp) => JSON.parse(resp.data.user)[0].fields)
       .then((userData) => {
         setUser(userData);
-        if (userData?.preference_diet != null) setDietTags(userData?.preference_diet);
-        if (userData?.preference_health != null) setHealthTags(userData?.preference_health);
+        if (userData?.preference_diet != null)
+          setDietTags(userData?.preference_diet);
+        if (userData?.preference_health != null)
+          setHealthTags(userData?.preference_health);
         if (userData?.favorites != null) setFavRecipes(userData?.favorites);
         if (userData?.profile_picture) {
           setProfilePicture(
@@ -359,10 +354,11 @@ export default function UserProfile() {
                       favRecipes.map((recipe) => (
                         <Grid item xs={9}>
                           <RecipeCard
-                            label={recipe.label}
-                            image={recipe.image}
-                            dishType={recipe.dishType}
-                            categories={recipe.categories}
+                            label={recipe.recipe.label}
+                            image={recipe.recipe.image}
+                            dishType={recipe.recipe.dishType}
+                            categories={recipe.recipe.categories}
+                            recipe={recipe}
                           />
                         </Grid>
                       ))

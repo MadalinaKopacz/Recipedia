@@ -4,9 +4,9 @@ import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { User } from "../../DTOs"
+import { User } from "../../DTOs";
 import * as React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const pages = ["Home", " Get Recipes", "About Us"];
 const routes = ["/", "/ingredients", "/aboutUs"];
@@ -20,16 +20,18 @@ function ResponsiveAppBar() {
   );
   const [user, setUser] = React.useState<User>();
 
-  const userToken = localStorage.getItem("userToken") ? localStorage.getItem("userToken") : "";
-  
+  const userToken = localStorage.getItem("userToken")
+    ? localStorage.getItem("userToken")
+    : "";
+
   const navigate = useNavigate();
 
   if (userToken && !user) {
-    axios.get("http://localhost:8000/user/profile/",
-      {
+    axios
+      .get("http://localhost:8000/user/profile/", {
         headers: {
-          "Authorization": userToken
-        }
+          Authorization: userToken,
+        },
       })
       .then((response) => {
         setUser(JSON.parse(response.data.user)[0].fields);
@@ -41,21 +43,26 @@ function ResponsiveAppBar() {
 
   const logoutUser = () => {
     if (userToken) {
-      axios.post("http://localhost:8000/user/logout/", {},
-        {
-          headers: {
-            "Authorization": userToken
+      axios
+        .post(
+          "http://localhost:8000/user/logout/",
+          {},
+          {
+            headers: {
+              Authorization: userToken,
+            },
           }
-        })
+        )
         .then((response) => {
           localStorage.removeItem("userToken");
-          navigate('/');
+          navigate("/");
+          window.location.reload();
         })
         .catch((error) => {
           console.error(error);
         });
-    } 
-  }
+    }
+  };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -117,8 +124,7 @@ function ResponsiveAppBar() {
           ))}
         </Box>
 
-        {
-          !userToken &&
+        {!userToken && (
           <>
             <Box sx={{ flexGrow: 0 }}>
               <Button
@@ -162,9 +168,8 @@ function ResponsiveAppBar() {
               </Button>
             </Box>
           </>
-        }
-        {
-          userToken && user &&
+        )}
+        {userToken && user && (
           <>
             <Box className="desktop-only " sx={{ flexGrow: 0 }}>
               <Typography
@@ -182,10 +187,11 @@ function ResponsiveAppBar() {
                   marginRight: 30,
                 }}
               >
-                Hello, {" "}
-                <span style={{ color: '#DD0426' }}>{user.first_name + " " + user.last_name}</span>{' '}
+                Hello,{" "}
+                <span style={{ color: "#DD0426" }}>
+                  {user.first_name + " " + user.last_name}
+                </span>{" "}
               </Typography>
-
             </Box>
             <Box sx={{ flexGrow: 0 }}>
               <Button
@@ -229,7 +235,7 @@ function ResponsiveAppBar() {
               </Button>
             </Box>
           </>
-        }
+        )}
       </Toolbar>
     </AppBar>
   );

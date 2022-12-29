@@ -129,6 +129,7 @@ export default function RecipesList() {
             image={recipe.recipe.image}
             dishType={recipe.recipe.dishType}
             categories={recipe.recipe.categories}
+            recipe={recipe}
           />
         ))}
       </Grid>

@@ -1,7 +1,14 @@
-import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [username, setUsername] = useState<string>("");
@@ -14,8 +21,8 @@ export default function LoginForm() {
     axios
       .post("http://localhost:8000/user/login/", { username, password })
       .then((response) => {
-          localStorage.setItem("userToken", response.data.token);
-          navigate('/');
+        localStorage.setItem("userToken", response.data.token);
+        navigate("/");
       })
       .catch((errors) => {
         setErrorMessage(errors.response.data.message);
@@ -132,6 +139,12 @@ export default function LoginForm() {
               {errorMessage}
             </Typography>
           )}
+        </Box>
+        <Box height={"30px"}>
+          <Typography sx={{ fontFamily: "Playfair" }}>
+            Don't have an account yet? No problem! Just{" "}
+            <Link href="/register">register</Link> now to get started.
+          </Typography>
         </Box>
       </Box>
     </Box>
