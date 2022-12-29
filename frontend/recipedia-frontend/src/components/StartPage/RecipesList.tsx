@@ -1,7 +1,8 @@
 import { Typography, Box, Grid, Button, TextField } from "@mui/material";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { Recipe } from "../../DTOs";
+import qs from "qs";
+import React, { useState, useEffect, useCallback } from "react";
+import { Recipe, User } from "../../DTOs";
 import ENV from "../../env";
 import RecipeCard from "./RecipeCard";
 
@@ -12,32 +13,93 @@ export default function RecipesList() {
   const [unknownRecipe, setUnknownRecipe] = useState<boolean>(false);
   const numberOfSuggestions: Number = 5;
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [user, setUser] = useState<User>();
 
-  const searchRecipes = (q: string) => {
-    if (!ENV.BASE_RECIPE_URL) {
-      return;
-    }
+  const userToken = localStorage.getItem("userToken")
+    ? localStorage.getItem("userToken")
+    : "";
+
+  if (userToken && !user) {
     axios
-      .get(ENV.BASE_RECIPE_URL, {
-        params: {
+      .get("http://localhost:8000/user/profile/", {
+        headers: {
+          Authorization: userToken,
+        },
+      })
+      .then((response) => {
+        setUser(JSON.parse(response.data.user)[0].fields);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  const searchRecipes = useCallback(
+    (q: string) => {
+      if (!ENV.BASE_RECIPE_URL) {
+        return;
+      }
+      let params = {};
+      if (user) {
+        if (user.preference_diet && user.preference_health) {
+          params = {
+            type: "any",
+            q: q,
+            app_id: ENV.RECIPE_SEARCH_APP_ID,
+            app_key: ENV.RECIPE_SEARCH_APP_KEY,
+            health: user.preference_health,
+            diet: user.preference_diet,
+            random: "true",
+          };
+        } else if (user.preference_diet) {
+          params = {
+            type: "any",
+            q: q,
+            app_id: ENV.RECIPE_SEARCH_APP_ID,
+            app_key: ENV.RECIPE_SEARCH_APP_KEY,
+            diet: user.preference_diet,
+            random: "true",
+          };
+        } else if (user.preference_health) {
+          params = {
+            type: "any",
+            q: q,
+            app_id: ENV.RECIPE_SEARCH_APP_ID,
+            app_key: ENV.RECIPE_SEARCH_APP_KEY,
+            health: user.preference_health,
+            random: "true",
+          };
+        }
+      } else {
+        params = {
           type: "any",
           q: q,
           app_id: ENV.RECIPE_SEARCH_APP_ID,
           app_key: ENV.RECIPE_SEARCH_APP_KEY,
           random: "true",
-        },
-      })
-      .then((response) => {
-        setRecipes(response.data.hits);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+        };
+      }
+
+      axios
+        .get(ENV.BASE_RECIPE_URL, {
+          params: params,
+          paramsSerializer: {
+            indexes: null,
+          },
+        })
+        .then((response) => {
+          setRecipes(response.data.hits);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    [user]
+  );
 
   useEffect(() => {
     searchRecipes("any");
-  }, []);
+  }, [searchRecipes, userToken]);
 
   if (!recipes) {
     return null;

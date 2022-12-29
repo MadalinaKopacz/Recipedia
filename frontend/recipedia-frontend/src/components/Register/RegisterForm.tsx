@@ -10,7 +10,7 @@ import {
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
   const [fname, setFname] = useState<string>("");
@@ -40,7 +40,6 @@ export default function RegisterForm() {
 
   const handleChangePhoto = (e: any) => {
     setProfilePic(URL.createObjectURL(e.target.files[0]));
-    console.log(profilepic);
   };
 
   const handleSubmit = (e: any) => {
