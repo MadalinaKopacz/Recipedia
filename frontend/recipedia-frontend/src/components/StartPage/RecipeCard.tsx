@@ -124,7 +124,6 @@ export default function RecipeCard(props: RecipeInfo) {
   }, [userToken]);
 
   useEffect(() => {
-    console.log({ favRecipes });
     if (favRecipes) {
       for (let i = 0; i < favRecipes.length; i++) {
         if (favRecipes[i].recipe.label === props.label) {

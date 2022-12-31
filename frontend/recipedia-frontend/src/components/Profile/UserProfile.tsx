@@ -106,7 +106,6 @@ export default function UserProfile() {
     });
 
     const prefs = { healthTags: healthTags, dietTags: dietTags };
-    console.log(prefs);
     axios
       .post(
         "http://localhost:8000/user/set_prefs/",
