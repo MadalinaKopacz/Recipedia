@@ -45,23 +45,13 @@ def create_user(request):
         )
 
     if request.method == "POST":
-        data = json.loads(request.body)
+        data = request.POST
         first_name = data.get("firstname")
         last_name = data.get("lastname")
         username = data.get("username")
         email = data.get("email")
-        password1 = data.get("password1")
-        password2 = data.get("password2")
-        profile_pic = data.get("profilepic")
-
-        if password1 != password2:
-            return JsonResponse(
-                {
-                    "status": "failed",
-                    "message": "Passwords don't match",
-                },
-                status=400,
-            )
+        password = data.get("password")
+        profile_pic = request.FILES.get("profilepic")
 
         if (
             User.objects.filter(username=username).exists()
@@ -76,7 +66,7 @@ def create_user(request):
             )
 
         user = User.objects.create_user(
-            username, email, password1, first_name, last_name, profile_pic
+            username, email, password, first_name, last_name, profile_pic
         )
 
         if user is not None:
@@ -176,9 +166,13 @@ def logout(request):
     if request.method == "POST":
         django_logout(request=request)
         return JsonResponse({"status": "success"})
-    
-    return JsonResponse({"status": "failed",}, status=400)
 
+    return JsonResponse(
+        {
+            "status": "failed",
+        },
+        status=400,
+    )
 
 
 def login_view_template(request):

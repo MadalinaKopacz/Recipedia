@@ -24,6 +24,20 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def create_superuser(self, username, email, password):
+        """
+        Creates and saves a superuser with the given email and password.
+        """
+        if not email:
+            raise ValueError("Email required")
+
+        user = self.model(
+            email=self.normalize_email(email), username=username, is_staff=True
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
 
 class User(AbstractUser):
     objects = UserManager()
@@ -33,3 +47,16 @@ class User(AbstractUser):
     preference_health = models.JSONField(blank=True, null=True)
     preference_diet = models.JSONField(blank=True, null=True)
     favorites = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True

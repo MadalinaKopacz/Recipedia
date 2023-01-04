@@ -9,8 +9,9 @@ import {
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ClearIcon from "@mui/icons-material/Clear";
 
 export default function RegisterForm() {
   const [fname, setFname] = useState<string>("");
@@ -19,7 +20,9 @@ export default function RegisterForm() {
   const [email, setEmail] = useState<string>("");
   const [password1, setPassword1] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
-  const [profilepic, setProfilePic] = useState<string>("");
+  const [profilepic, setProfilePic] = useState<File>();
+  const profilePicInputRef = useRef<HTMLInputElement>(null);
+  const [profilepicURL, setProfilePicURL] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
 
@@ -28,18 +31,20 @@ export default function RegisterForm() {
   );
   const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
 
-  let correctMail = false;
-  let correctFname = false;
-  let correctLname = false;
-  let correctPassword = false;
-
   const handleEmailChange = (e: any) => {
     setEmail(e.target.value);
-    correctMail = emailRegex.test(email);
   };
 
   const handleChangePhoto = (e: any) => {
-    setProfilePic(URL.createObjectURL(e.target.files[0]));
+    setProfilePic(e.target.files[0]);
+    setProfilePicURL(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const handleRemovePhoto = () => {
+    setProfilePic(undefined);
+    setProfilePicURL("");
+    URL.revokeObjectURL(profilepicURL);
+    profilePicInputRef.current && (profilePicInputRef.current.value = "");
   };
 
   const handleSubmit = (e: any) => {
@@ -58,15 +63,21 @@ export default function RegisterForm() {
       return;
     }
 
+    let form_data = new FormData();
+    if (profilepic) {
+      form_data.append("profilepic", profilepic, profilepic.name);
+    }
+    form_data.append("firstname", fname);
+    form_data.append("lastname", lname);
+    form_data.append("username", username);
+    form_data.append("email", email);
+    form_data.append("password", password1);
+
     axios
-      .post("http://localhost:8000/user/register/", {
-        firstname: fname,
-        lastname: lname,
-        username: username,
-        email: email,
-        password1: password1,
-        password2: password2,
-        profilepic: profilepic,
+      .post("http://localhost:8000/user/register/", form_data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((response) => {
         setErrorMessage("");
@@ -228,6 +239,7 @@ export default function RegisterForm() {
               component="label"
             >
               <input
+                ref={profilePicInputRef}
                 hidden
                 accept="image/*"
                 type="file"
@@ -237,11 +249,16 @@ export default function RegisterForm() {
               />
               <PhotoCamera />
             </IconButton>
+            {profilepicURL && profilepic && (
+              <IconButton onClick={handleRemovePhoto}>
+                <ClearIcon />
+              </IconButton>
+            )}
           </Box>
           <Avatar
             alt="Remy Sharp"
             sx={{ width: 120, height: 120 }}
-            src={profilepic}
+            src={profilepicURL}
           />
         </Box>
 
@@ -283,7 +300,7 @@ export default function RegisterForm() {
             alignItems="center"
             padding="16px"
           >
-            {errorMessage != "" && (
+            {errorMessage !== "" && (
               <Typography
                 sx={{
                   display: { md: "flex" },
