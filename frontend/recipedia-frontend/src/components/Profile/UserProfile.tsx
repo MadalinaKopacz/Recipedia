@@ -13,6 +13,9 @@ import { useState, useEffect } from "react";
 import { User, Recipe } from "../../DTOs";
 import ENV from "../../env";
 import RecipeCard from "../StartPage/RecipeCard";
+import EditProfile from "../EditProfile/EditProfile"
+import ChangePassword from "../EditProfile/ChangePassword";
+
 
 const healthPrefs = [
   "alcohol-cocktail",
@@ -234,10 +237,10 @@ export default function UserProfile() {
                     </Grid>
                   </Grid>
                   <Grid item sx={{ marginTop: 18 }}>
-                    <Button variant="contained">Edit profile</Button>
+                    <EditProfile/>
                   </Grid>
                   <Grid item sx={{ marginTop: 1.5 }}>
-                    <Button variant="contained">Change Password</Button>
+                    <ChangePassword/>
                   </Grid>
                 </Grid>
               </Box>

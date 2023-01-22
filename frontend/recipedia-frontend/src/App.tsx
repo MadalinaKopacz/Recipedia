@@ -5,8 +5,8 @@ import StartPage from "./pages/StartPage";
 import IngredientsPage from "./pages/IngredientsPage";
 import ProfilePage from "./pages/ProfilePage";
 import RegisterPage from "./pages/RegisterPage";
-
 import "./App.css";
+
 const router = createBrowserRouter([
   {
     path: "/",

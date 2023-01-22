@@ -6,12 +6,16 @@ import {
   Button,
   Avatar,
   IconButton,
+  InputLabel,
+  Input,
+  InputAdornment,
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import axios from "axios";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClearIcon from "@mui/icons-material/Clear";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function RegisterForm() {
   const [fname, setFname] = useState<string>("");
@@ -24,6 +28,12 @@ export default function RegisterForm() {
   const profilePicInputRef = useRef<HTMLInputElement>(null);
   const [profilepicURL, setProfilePicURL] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+
+  const handleClickShowPassword1 = () => setShowPassword1((show) => !show);
+  const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
+
   const navigate = useNavigate();
 
   const emailRegex = new RegExp(
@@ -129,7 +139,7 @@ export default function RegisterForm() {
             required
             id="firstname"
             label="First name"
-            variant="outlined"
+            variant="standard"
             fullWidth={true}
             name="firstname"
             value={fname}
@@ -141,7 +151,7 @@ export default function RegisterForm() {
             required
             id="lastname"
             label="Last name"
-            variant="outlined"
+            variant="standard"
             fullWidth={true}
             name="firstname"
             value={lname}
@@ -154,7 +164,7 @@ export default function RegisterForm() {
             id="username"
             label="Username"
             placeholder="Username"
-            variant="outlined"
+            variant="standard"
             fullWidth={true}
             value={username}
             name="username"
@@ -167,39 +177,63 @@ export default function RegisterForm() {
             id="email"
             label="Email"
             placeholder="Your email"
-            variant="outlined"
+            variant="standard"
             fullWidth={true}
             name="email"
             value={email}
             onChange={handleEmailChange}
           />
         </FormControl>
-        <FormControl sx={{ padding: 2, width: "100%" }}>
-          <TextField
+        <FormControl sx={{ paddingX: 2, paddingY: 0.1, width: "100%" }}>
+          <InputLabel htmlFor="standard-adornment-password">
+            Your Password
+          </InputLabel>
+          <Input
             required
             id="password1"
-            type="password"
-            label="Enter your password"
             placeholder="Your password"
-            variant="outlined"
             fullWidth={true}
             name="password1"
             value={password1}
             onChange={(e) => setPassword1(e.target.value)}
+            type={showPassword1 ? "text" : "password"}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword1}
+                  edge="end"
+                >
+                  {showPassword1 ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
         </FormControl>
-        <FormControl sx={{ padding: 2, width: "100%" }}>
-          <TextField
+        <FormControl sx={{ paddingX: 2, paddingY: 0.1, width: "100%" }}>
+          <InputLabel htmlFor="standard-adornment-password">
+            Confirm Password
+          </InputLabel>
+          <Input
+            type={showPassword2 ? "text" : "password"}
             required
             id="password2"
-            type="password"
-            label="Enter your password again"
             placeholder="Your password"
-            variant="outlined"
             fullWidth={true}
             name="password2"
             value={password2}
             onChange={(e) => setPassword2(e.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword2}
+                  edge="end"
+                >
+                  {showPassword2 ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
         </FormControl>
         <Box

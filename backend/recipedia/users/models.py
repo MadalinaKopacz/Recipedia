@@ -47,7 +47,7 @@ class User(AbstractUser):
     preference_health = models.JSONField(blank=True, null=True)
     preference_diet = models.JSONField(blank=True, null=True)
     favorites = models.JSONField(blank=True, null=True)
-
+    
     def __str__(self):
         return self.email
 

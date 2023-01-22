@@ -88,6 +88,53 @@ def create_user(request):
     )
 
 
+@custom_login_required
+def update_user(request):
+    user = get_object_or_404(User, username=request.user.username)
+
+    first_name = request.POST.get("first_name")
+    last_name = request.POST.get("last_name")
+    username = request.POST.get("username")
+    email = request.POST.get("email")
+    profile_pic = request.FILES.get("profile_pic")
+    try:
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        if username:
+            if (
+                username != user.username
+                and User.objects.filter(username=username).exists()
+            ):
+                return JsonResponse(
+                    {
+                        "status": "failed",
+                        "message": "Failed to update account.",
+                    },
+                    status=400,
+                )
+            user.username = username
+        if email:
+            if email != user.email and User.objects.filter(email=email).exists():
+                return JsonResponse(
+                    {
+                        "status": "failed",
+                        "message": "Failed to update account.",
+                    },
+                    status=400,
+                )
+            user.email = email
+        if profile_pic:
+            user.profile_picture = profile_pic
+        user.save()
+        return JsonResponse({"status": "succes"}, status=200)
+    except:
+        return JsonResponse(
+            {"status": "failed", "message": "Failed to update account."}, status=400
+        )
+
+
 def loginView(request):
     if not request.user.is_anonymous:  # Somebody already connected tries to access
         return JsonResponse(
@@ -203,7 +250,6 @@ def get_user_details(request):
     context = {}
     user = serializers.serialize("json", [request.user])
     context["user"] = user
-    # print(user)
     return JsonResponse(context)
 
 
@@ -220,7 +266,7 @@ def delete_user(request):
 
 
 @custom_login_required
-def update_user(request):
+def update_user_view(request):
     context = {}
 
     object = get_object_or_404(User, username=request.user.username)
@@ -238,12 +284,10 @@ def update_user(request):
 @custom_login_required
 def update_preferences(request):
     user: User = request.user
-    print(user.preference_diet, user.preference_health)
     prefs = json.loads(request.body)["prefs"]
 
     user.preference_health = prefs["healthTags"]
     user.preference_diet = prefs["dietTags"]
-    print(user.preference_diet, user.preference_health)
     user.save()
     return HttpResponse(200)
 
@@ -283,18 +327,20 @@ def edit_favorites(request):
 
 @custom_login_required
 def change_password(request):
-    context = {}
+    user = get_object_or_404(User, username=request.user.username)
+    old_password = request.POST.get("old_password")
+    new_password1 = request.POST.get("new_password1")
+    if not user.check_password(old_password):
+        return JsonResponse(
+            {"status": "failed", "message": "Reenter your old password"}, status=400
+        )
+    try:
+        user.set_password(new_password1)
+        user.save()
+        update_session_auth_hash(request, user)
+        return JsonResponse({"status": "succes"}, status=200)
 
-    form = PasswordChangeForm(user=request.user, data=request.POST or None)
-
-    if request.method == "POST":
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            return HttpResponseRedirect("../profile/")
-
-        else:
-            context["error"] = "Passwords don't match."
-
-    context["form"] = form
-    return render(request, "users/change_password.html", context)
+    except:
+        return JsonResponse(
+            {"status": "failed", "message": "Failed to change password."}, status=400
+        )

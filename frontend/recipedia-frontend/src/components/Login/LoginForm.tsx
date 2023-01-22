@@ -1,7 +1,12 @@
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
   FormControl,
+  IconButton,
+  Input,
+  InputAdornment,
+  InputLabel,
   Link,
   TextField,
   Typography,
@@ -15,6 +20,9 @@ export default function LoginForm() {
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -68,32 +76,48 @@ export default function LoginForm() {
         autoComplete="off"
         onSubmit={handleSubmit}
       >
-        <FormControl sx={{ padding: 2, width: "50%" }}>
-          <TextField
+        <br />
+
+        <FormControl sx={{ padding: 0.5, width: "50%" }}>
+          <InputLabel htmlFor="standard-adornment-password">
+            Username/Email
+          </InputLabel>
+          <Input
             required
             id="username"
-            label="Username/email"
             placeholder="Your username/email"
-            variant="outlined"
             fullWidth={true}
             onChange={(e) => setUsername(e.target.value)}
             value={username}
             name="username"
           />
         </FormControl>
-        <FormControl sx={{ padding: 2, width: "50%" }}>
-          <TextField
+        <br />
+        <FormControl sx={{ padding: 0.5, width: "50%" }}>
+          <InputLabel htmlFor="standard-adornment-password">
+            Password
+          </InputLabel>
+          <Input
             required
             id="password"
-            label="Password"
-            type="password"
             autoComplete="current-password"
-            variant="outlined"
             placeholder="Your password"
             fullWidth={true}
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             name="password"
+            type={showPassword ? "text" : "password"}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
         </FormControl>
 
