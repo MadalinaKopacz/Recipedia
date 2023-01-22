@@ -1,8 +1,9 @@
 import { Typography, Box, Grid, Button, TextField } from "@mui/material";
 import axios from "axios";
 import qs from "qs";
-import React, { useState, useEffect, useCallback } from "react";
-import { Recipe, User } from "../../DTOs";
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import { useAuth } from "../../App";
+import { Recipe } from "../../DTOs";
 import ENV from "../../env";
 import RecipeCard from "./RecipeCard";
 
@@ -13,26 +14,7 @@ export default function RecipesList() {
   const [unknownRecipe, setUnknownRecipe] = useState<boolean>(false);
   const numberOfSuggestions: Number = 5;
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [user, setUser] = useState<User>();
-
-  const userToken = localStorage.getItem("userToken")
-    ? localStorage.getItem("userToken")
-    : "";
-
-  if (userToken && !user) {
-    axios
-      .get("http://localhost:8000/user/profile/", {
-        headers: {
-          Authorization: userToken,
-        },
-      })
-      .then((response) => {
-        setUser(JSON.parse(response.data.user)[0].fields);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+  const context = useAuth();
 
   const searchRecipes = useCallback(
     (q: string) => {
@@ -40,33 +22,33 @@ export default function RecipesList() {
         return;
       }
       let params = {};
-      if (user) {
-        if (user.preference_diet && user.preference_health) {
+      if (context.user) {
+        if (context.user.preference_diet && context.user.preference_health) {
           params = {
             type: "any",
             q: q,
             app_id: ENV.RECIPE_SEARCH_APP_ID,
             app_key: ENV.RECIPE_SEARCH_APP_KEY,
-            health: user.preference_health,
-            diet: user.preference_diet,
+            health: context.user.preference_health,
+            diet: context.user.preference_diet,
             random: "true",
           };
-        } else if (user.preference_diet) {
+        } else if (context.user.preference_diet) {
           params = {
             type: "any",
             q: q,
             app_id: ENV.RECIPE_SEARCH_APP_ID,
             app_key: ENV.RECIPE_SEARCH_APP_KEY,
-            diet: user.preference_diet,
+            diet: context.user.preference_diet,
             random: "true",
           };
-        } else if (user.preference_health) {
+        } else if (context.user.preference_health) {
           params = {
             type: "any",
             q: q,
             app_id: ENV.RECIPE_SEARCH_APP_ID,
             app_key: ENV.RECIPE_SEARCH_APP_KEY,
-            health: user.preference_health,
+            health: context.user.preference_health,
             random: "true",
           };
         }
@@ -94,12 +76,12 @@ export default function RecipesList() {
           console.error(error);
         });
     },
-    [user]
+    [context.user]
   );
 
   useEffect(() => {
     searchRecipes("any");
-  }, [searchRecipes, userToken]);
+  }, [searchRecipes, context.token]);
 
   if (!recipes) {
     return null;

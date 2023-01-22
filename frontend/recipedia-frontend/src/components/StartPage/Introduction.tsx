@@ -8,6 +8,8 @@ import {
   Typography,
   Fab,
 } from "@mui/material";
+import { useContext } from "react";
+import { useAuth } from "../../App";
 import StepCard from "./StepCard";
 
 const itemData = [
@@ -26,6 +28,7 @@ const itemData = [
 ];
 
 export default function Introduction() {
+  const context = useAuth();
   return (
     <>
       <Box sx={{ position: "relative" }}>
@@ -96,30 +99,32 @@ export default function Introduction() {
           >
             Try now
           </Fab>
-          <Fab
-            href="/register"
-            sx={{
-              my: 2,
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            style={{
-              width: "160px",
-              height: "66px",
-              color: "#1C7054",
-              backgroundColor: "#E5E5E5",
-              borderRadius: 30,
-              textTransform: "none",
-              fontFamily: "'Roboto'",
-              fontSize: "20px",
-              fontWeight: 700,
-              marginRight: 30,
-            }}
-          >
-            Get an account
-          </Fab>
+          {!context.user && (
+            <Fab
+              href="/register"
+              sx={{
+                my: 2,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              style={{
+                width: "160px",
+                height: "66px",
+                color: "#1C7054",
+                backgroundColor: "#E5E5E5",
+                borderRadius: 30,
+                textTransform: "none",
+                fontFamily: "'Roboto'",
+                fontSize: "20px",
+                fontWeight: 700,
+                marginRight: 30,
+              }}
+            >
+              Get an account
+            </Fab>
+          )}
         </Box>
       </Box>
 

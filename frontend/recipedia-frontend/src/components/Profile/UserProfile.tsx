@@ -9,13 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { User, Recipe } from "../../DTOs";
+import { useState, useEffect, useContext } from "react";
+import { Recipe } from "../../DTOs";
 import ENV from "../../env";
 import RecipeCard from "../StartPage/RecipeCard";
-import EditProfile from "../EditProfile/EditProfile"
+import EditProfile from "../EditProfile/EditProfile";
 import ChangePassword from "../EditProfile/ChangePassword";
-
+import { useAuth } from "../../App";
 
 const healthPrefs = [
   "alcohol-cocktail",
@@ -64,38 +64,28 @@ const dietPrefs = [
 ];
 
 export default function UserProfile() {
-  const userToken = localStorage.getItem("userToken");
-  const [user, setUser] = useState<User>();
   const [profilePicture, setProfilePicture] = useState<string>("");
   const [favRecipes, setFavRecipes] = useState<Recipe[]>([]);
   const [healthTags, setHealthTags] = useState<string[]>([]);
   const [dietTags, setDietTags] = useState<string[]>([]);
-
+  const context = useAuth();
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/user/profile/", {
-        headers: {
-          Authorization: userToken,
-        },
-      })
-      .then((resp) => JSON.parse(resp.data.user)[0].fields)
-      .then((userData) => {
-        setUser(userData);
-        if (userData?.preference_diet != null)
-          setDietTags(userData?.preference_diet);
-        if (userData?.preference_health != null)
-          setHealthTags(userData?.preference_health);
-        if (userData?.favorites != null) setFavRecipes(userData?.favorites);
-        if (userData?.profile_picture) {
-          setProfilePicture(
-            "http://localhost:8000/media/" + userData?.profile_picture
-          );
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [userToken]);
+    if (context.user?.preference_diet != null)
+      setDietTags(context.user?.preference_diet);
+    if (context.user?.preference_health != null)
+      setHealthTags(context.user?.preference_health);
+    if (context.user?.favorites != null) setFavRecipes(context.user.favorites);
+    if (context.user?.profile_picture) {
+      setProfilePicture(
+        "http://localhost:8000/media/" + context.user?.profile_picture
+      );
+    }
+  }, [
+    context.user?.favorites,
+    context.user?.preference_diet,
+    context.user?.preference_health,
+    context.user?.profile_picture,
+  ]);
 
   const savePrefs = (event: any) => {
     document.querySelectorAll("#healthTags").forEach((t) => {
@@ -115,11 +105,12 @@ export default function UserProfile() {
         { prefs: prefs },
         {
           headers: {
-            Authorization: userToken,
+            Authorization: context.token,
           },
         }
       )
       .then((response) => {
+        context.refreshUser();
         alert("Preferences saved");
       })
       .catch((error) => {
@@ -129,7 +120,7 @@ export default function UserProfile() {
 
   return (
     <>
-      {user ? (
+      {context.user ? (
         <Box
           sx={{
             marginTop: 15,
@@ -186,7 +177,7 @@ export default function UserProfile() {
                         textDecoration: "underline",
                       }}
                     >
-                      {user?.first_name + " " + user?.last_name}
+                      {context.user?.first_name + " " + context.user?.last_name}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -224,23 +215,23 @@ export default function UserProfile() {
                         <Typography
                           sx={{ marginTop: 1, marginLeft: 3, fontSize: 15 }}
                         >
-                          Username: {user?.username}
+                          Username: {context.user?.username}
                         </Typography>
                       </Grid>
                       <Grid item>
                         <Typography
                           sx={{ marginTop: 1, marginLeft: 3, fontSize: 15 }}
                         >
-                          Email: {user?.email}
+                          Email: {context.user?.email}
                         </Typography>
                       </Grid>
                     </Grid>
                   </Grid>
                   <Grid item sx={{ marginTop: 18 }}>
-                    <EditProfile/>
+                    <EditProfile />
                   </Grid>
                   <Grid item sx={{ marginTop: 1.5 }}>
-                    <ChangePassword/>
+                    <ChangePassword />
                   </Grid>
                 </Grid>
               </Box>

@@ -59,8 +59,10 @@ export default function RegisterForm() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-
-    if (!emailRegex.test(email)) {
+    if (username.includes("@")) {
+      setErrorMessage("The username cannot include '@' character.");
+      return;
+    } else if (!emailRegex.test(email)) {
       setErrorMessage("Email is incorrect.");
       return;
     } else if (password1 !== password2) {

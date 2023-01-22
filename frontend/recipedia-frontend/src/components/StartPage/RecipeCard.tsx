@@ -1,7 +1,8 @@
 import { Box, Card, Grid, Link, Modal, Typography } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Recipe, User } from "../../DTOs";
+import { useContext, useEffect, useState } from "react";
+import { useAuth } from "../../App";
+import { Recipe } from "../../DTOs";
 
 interface RecipeInfo {
   label: string;
@@ -27,11 +28,14 @@ const style = {
 };
 
 export default function RecipeCard(props: RecipeInfo) {
-  const userToken = localStorage.getItem("userToken");
-  const [user, setUser] = useState<User>();
   const [favRecipes, setFavRecipes] = useState<Recipe[]>([]);
   const [open, setOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const context = useAuth();
+
+  useEffect(() => {
+    if (context.user?.favorites != null) setFavRecipes(context.user?.favorites);
+  }, [context.user?.favorites]);
 
   const addFavorite = () => {
     setIsFavorite(true);
@@ -41,7 +45,7 @@ export default function RecipeCard(props: RecipeInfo) {
         { command: "add", recipe: props.recipe },
         {
           headers: {
-            Authorization: userToken,
+            Authorization: context.token,
           },
         }
       )
@@ -59,7 +63,7 @@ export default function RecipeCard(props: RecipeInfo) {
         { command: "remove", recipe: props.recipe },
         {
           headers: {
-            Authorization: userToken,
+            Authorization: context.token,
           },
         }
       )
@@ -107,31 +111,14 @@ export default function RecipeCard(props: RecipeInfo) {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/user/profile/", {
-        headers: {
-          Authorization: userToken,
-        },
-      })
-      .then((resp) => JSON.parse(resp.data.user)[0].fields)
-      .then((userData) => {
-        setUser(userData);
-        setFavRecipes(userData?.favorites);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [userToken]);
-
-  useEffect(() => {
     if (favRecipes) {
       for (let i = 0; i < favRecipes.length; i++) {
-        if (favRecipes[i].recipe.label === props.label) {
+        if (favRecipes[i].recipe.label === props.recipe.recipe.label) {
           setIsFavorite(true);
         }
       }
     }
-  }, [userToken, favRecipes, props.label]);
+  }, [context.token, favRecipes, props.recipe.recipe.label]);
 
   return (
     <Grid item xs={3} textAlign={"center"} minWidth={450}>
@@ -201,7 +188,9 @@ export default function RecipeCard(props: RecipeInfo) {
             }}
           >
             <div>
-              {user ? handleFavsLoggedInUser() : handleFavsNotLoggedInUser()}
+              {context.user
+                ? handleFavsLoggedInUser()
+                : handleFavsNotLoggedInUser()}
               <Modal open={open} onClose={handleClose}>
                 <Box sx={style}>
                   <Typography sx={{ fontFamily: "Playfair" }}>

@@ -8,14 +8,14 @@ type Recipe = {
 };
 
 type User = {
-  first_name: string,
-  last_name: string,
+  first_name: string;
+  last_name: string;
   username: string;
-  preference_diet: string[],
-  preference_health: string[],
-  favorites: string[],
+  preference_diet: string[];
+  preference_health: string[];
+  favorites: Recipe[];
   profile_picture: string;
   email: string;
-}
+};
 
 export type { Recipe, User };
