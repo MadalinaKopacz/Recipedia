@@ -14,6 +14,8 @@ import IngredientsPage from "./pages/IngredientsPage";
 import ProfilePage from "./pages/ProfilePage";
 import RegisterPage from "./pages/RegisterPage";
 import "./App.css";
+import E404Page from "./pages/404Page";
+
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { User } from "./DTOs";
@@ -152,7 +154,7 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<p>404</p>} />
+          <Route path="*" element={<E404Page />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
