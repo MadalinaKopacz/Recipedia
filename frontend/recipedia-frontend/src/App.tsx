@@ -6,6 +6,7 @@ import IngredientsPage from "./pages/IngredientsPage";
 import ProfilePage from "./pages/ProfilePage";
 import RegisterPage from "./pages/RegisterPage";
 import "./App.css";
+import E404Page from "./pages/404Page";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
     path: "/profile",
     element: <ProfilePage />,
   },
+  {
+    path: "*",
+    element: <E404Page />,
+  }
 ]);
 
 const App: React.FC = () => {
