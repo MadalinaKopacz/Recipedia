@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   FormControl,
@@ -18,9 +18,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { isContext } from "vm";
+import { useAuth } from "../../App";
 
 export default function ChangePassword() {
-  const userToken = localStorage.getItem("userToken");
   const [open, setOpen] = React.useState(false);
   const [old_password, setOldPassword] = useState<string>("");
   const [new_password1, setNewPassword1] = useState<string>("");
@@ -44,6 +45,7 @@ export default function ChangePassword() {
   const handleClickShowPassword3 = () => setShowPassword3((show) => !show);
 
   const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+  const context = useAuth();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -100,7 +102,7 @@ export default function ChangePassword() {
     axios
       .post("http://localhost:8000/user/change_password/", form_data, {
         headers: {
-          Authorization: userToken,
+          Authorization: context.token,
         },
       })
       .then((response) => {
@@ -118,6 +120,7 @@ export default function ChangePassword() {
         setError3(false);
 
         setOpen(false);
+        context.refreshUser();
         window.location.reload();
       })
       .catch((errors) => {

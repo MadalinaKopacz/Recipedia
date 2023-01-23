@@ -12,8 +12,9 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../App";
 
 export default function LoginForm() {
   const [username, setUsername] = useState<string>("");
@@ -21,7 +22,7 @@ export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
+  const context = useAuth();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleSubmit = (e: any) => {
@@ -29,8 +30,7 @@ export default function LoginForm() {
     axios
       .post("http://localhost:8000/user/login/", { username, password })
       .then((response) => {
-        localStorage.setItem("userToken", response.data.token);
-        navigate("/");
+        context.login(response.data.token);
       })
       .catch((errors) => {
         setErrorMessage(errors.response.data.message);

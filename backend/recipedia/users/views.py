@@ -208,20 +208,6 @@ def login_view(request):
     )
 
 
-@custom_login_required
-def logout(request):
-    if request.method == "POST":
-        django_logout(request=request)
-        return JsonResponse({"status": "success"})
-
-    return JsonResponse(
-        {
-            "status": "failed",
-        },
-        status=400,
-    )
-
-
 def login_view_template(request):
     if not request.user.is_anonymous:  # Somebody already connected tries to access
         return HttpResponse("Already logged in")

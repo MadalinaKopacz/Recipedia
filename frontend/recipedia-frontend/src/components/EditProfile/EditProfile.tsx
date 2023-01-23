@@ -8,14 +8,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import axios from "axios";
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useRef, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import { Avatar, FormControl, IconButton, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { useAuth } from "../../App";
 
 export default function EditProfile() {
-  const userToken = localStorage.getItem("userToken");
   const [open, setOpen] = React.useState(false);
   const [fname, setFname] = useState<string>("");
   const [lname, setLname] = useState<string>("");
@@ -25,7 +24,7 @@ export default function EditProfile() {
   const profilePicInputRef = useRef<HTMLInputElement>(null);
   const [profilepicURL, setProfilePicURL] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const navigate = useNavigate();
+  const context = useAuth();
 
   const emailRegex = new RegExp(
     /^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](.?[-!#$%&'*+/0-9=?A-Z^_a-z{|}~])*@[a-zA-Z](-?[a-zA-Z0-9])*(.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
@@ -73,7 +72,7 @@ export default function EditProfile() {
     axios
       .post("http://localhost:8000/user/update_user/", form_data, {
         headers: {
-          Authorization: userToken,
+          Authorization: context.token,
         },
       })
       .then((response) => {
@@ -85,6 +84,7 @@ export default function EditProfile() {
         setUsername("");
         setProfilePicURL("");
         setOpen(false);
+        context.refreshUser();
         window.location.reload();
       })
       .catch((errors) => {

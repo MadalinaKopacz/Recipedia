@@ -7,7 +7,7 @@ const RegisterPage = () => {
     <>
       <StartPageHeader />
       <RegisterPageBody />
-      <Box sx={{height: "5rem"}}></Box>
+      <Box sx={{ height: "5rem" }}></Box>
     </>
   );
 };

@@ -4,9 +4,11 @@ import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { User } from "../../DTOs";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../App";
+import { useContext, useEffect } from "react";
+import { DialogContentText } from "@mui/material";
 
 const pages = ["Home", " Get Recipes"];
 const routes = ["/", "/ingredients"];
@@ -18,49 +20,16 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  const [user, setUser] = React.useState<User>();
 
-  const userToken = localStorage.getItem("userToken")
-    ? localStorage.getItem("userToken")
-    : "";
+  const context = useAuth();
 
   const navigate = useNavigate();
 
-  if (userToken && !user) {
-    axios
-      .get("http://localhost:8000/user/profile/", {
-        headers: {
-          Authorization: userToken,
-        },
-      })
-      .then((response) => {
-        setUser(JSON.parse(response.data.user)[0].fields);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   const logoutUser = () => {
-    if (userToken) {
-      axios
-        .post(
-          "http://localhost:8000/user/logout/",
-          {},
-          {
-            headers: {
-              Authorization: userToken,
-            },
-          }
-        )
-        .then((response) => {
-          localStorage.removeItem("userToken");
-          navigate("/");
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    if (context.token) {
+      context.logout();
+      navigate("/");
+      window.location.reload();
     }
   };
 
@@ -124,7 +93,7 @@ function ResponsiveAppBar() {
           ))}
         </Box>
 
-        {!userToken && (
+        {!context.token && (
           <>
             <Box sx={{ flexGrow: 0 }}>
               <Button
@@ -169,7 +138,7 @@ function ResponsiveAppBar() {
             </Box>
           </>
         )}
-        {userToken && user && (
+        {context.token && context.user && (
           <>
             <Box className="desktop-only " sx={{ flexGrow: 0 }}>
               <Typography
@@ -189,7 +158,7 @@ function ResponsiveAppBar() {
               >
                 Hello,{" "}
                 <span style={{ color: "#DD0426" }}>
-                  {user.first_name + " " + user.last_name}
+                  {context.user.first_name + " " + context.user.last_name}
                 </span>{" "}
               </Typography>
             </Box>
