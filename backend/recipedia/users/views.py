@@ -241,14 +241,24 @@ def get_user_details(request):
 
 @custom_login_required
 def delete_user(request):
-    context = {}
     object = get_object_or_404(User, username=request.user.username)
 
-    if request.method == "POST":
+    if request.method == "DELETE":
         object.delete()
-        return HttpResponseRedirect("/")
+        return JsonResponse(
+            {
+                "status": "succes",
+            },
+            status=200,
+        )
 
-    return render(request, "users/delete_user.html", context)
+    return JsonResponse(
+        {
+            "status": "failed",
+            "message": "Invalid request method",
+        },
+        status=400,
+    )
 
 
 @custom_login_required
