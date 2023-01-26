@@ -13,7 +13,6 @@ const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
-  height: "10%",
   transform: "translate(-50%, -50%)",
   width: 400,
   backgroundColor: "#EFE2D3",
@@ -21,6 +20,7 @@ const style = {
   paddingBottom: 2,
   outline: "none",
   display: "flex",
+  flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
   borderRadius: "15px",
@@ -63,56 +63,59 @@ export default function DeleteAccount() {
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <Typography sx={{ fontFamily: "Playfair" }}>
+          <Typography sx={{ pt: "1rem", fontFamily: "Playfair", color: "#383535" }}>
             Are you sure you want to delete your account?
           </Typography>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              ml: "5rem",
+              justifyContent: "space-around",
               mt: "5rem",
-              position: "absolute",
-              bottom: -5,
               left: 0,
               right: 0,
               marginTop: "",
+              width: "100%"
             }}
           >
-            <Grid item xs={6} justifyContent="center" alignItems="center">
-              <Button
-                sx={{
-                  my: 2,
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontFamily: "Playfair",
-                }}
-                onClick={handleDelete}
-                variant="outlined"
-              >
-                Yes
-              </Button>
-            </Grid>
-
-            <Grid item xs={6}>
-              <Button
-                sx={{
-                  my: 2,
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontFamily: "Playfair",
-                }}
-                onClick={handleClose}
-                variant="contained"
-              >
-                No
-              </Button>
-            </Grid>
+            <Button
+              sx={{
+                my: 2,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                fontFamily: "Playfair",
+                color: "#383535",
+                borderColor: "#383535",
+                '&:hover': {
+                  borderColor: '#dd0426',
+                  color: '#dd0426',
+                },
+              }}
+              onClick={handleDelete}
+              variant="outlined"
+            >
+              Yes
+            </Button>
+            <Button
+              sx={{
+                my: 2,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                fontFamily: "Playfair",
+                backgroundColor: "#383535",
+                '&:hover': {
+                  backgroundColor: '#dd0426',
+                },
+              }}
+              onClick={handleClose}
+              variant="contained"
+            >
+              No
+            </Button>
           </Box>
         </Box>
       </Modal>
