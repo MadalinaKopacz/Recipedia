@@ -16,6 +16,7 @@ import RecipeCard from "../StartPage/RecipeCard";
 import EditProfile from "../EditProfile/EditProfile";
 import ChangePassword from "../EditProfile/ChangePassword";
 import { useAuth } from "../../App";
+import DeleteAccount from "../EditProfile/DeleteAccounts";
 
 const healthPrefs = [
   "alcohol-cocktail",
@@ -232,6 +233,9 @@ export default function UserProfile() {
                   </Grid>
                   <Grid item sx={{ marginTop: 1.5 }}>
                     <ChangePassword />
+                  </Grid>
+                  <Grid item sx={{ marginTop: 1.5 }}>
+                    <DeleteAccount />
                   </Grid>
                 </Grid>
               </Box>
