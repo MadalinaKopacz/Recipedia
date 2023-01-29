@@ -305,9 +305,14 @@ def edit_favorites(request):
             },
             status=400,
         )
-    if info["command"] == "add" and info["recipe"] not in favorites:
+    found = False
+    for recipe in favorites:
+        if recipe["uri"] == info["recipe"]["uri"]:
+            found = True
+            break
+    if info["command"] == "add" and not found:
         favorites.append(info["recipe"])
-    elif info["command"] == "remove" and info["recipe"] in favorites:
+    elif info["command"] == "remove" and found:
         favorites.remove(info["recipe"])
 
     user.favorites = favorites

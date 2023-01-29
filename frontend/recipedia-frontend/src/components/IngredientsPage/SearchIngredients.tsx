@@ -17,7 +17,7 @@ const toTitleCase = (str: string) => {
     .toLowerCase()
     .split(" ")
     .map(function (word) {
-      return word.replace(word[0], word[0].toUpperCase());
+      return word ? word.replace(word[0], word[0].toUpperCase()) : word;
     })
     .join(" ");
 };
@@ -55,13 +55,21 @@ export default function SearchIngredients() {
 
   const handleKeyPress = (event: any) => {
     if (event.key === "Enter") {
-      if (ingSuggestions.length > 0)
-        if (ingSuggestions.includes(toTitleCase(value))) {
-          if (!chosenIng.includes(toTitleCase(value)))
-            chosenIng.push(toTitleCase(value));
+      if (ingSuggestions.length > 0) {
+        const newValue = toTitleCase(value);
+        if (ingSuggestions.includes(newValue)) {
+          setChosenIng((prevState) => {
+            if (prevState.includes(newValue)) {
+              return prevState;
+            }
+            const newState = [...prevState];
+            newState.push(newValue);
+            return newState;
+          });
           setValue("");
           setIngSuggestions([]);
         }
+      }
     }
   };
 
@@ -79,7 +87,14 @@ export default function SearchIngredients() {
         if (response.data.parsed.length === 0) setUnknownIng(true);
         else {
           setUnknownIng(false);
-          if (!chosenIng.includes(searchTerm)) chosenIng.push(searchTerm);
+          setChosenIng((prevState) => {
+            if (prevState.includes(searchTerm)) {
+              return prevState;
+            }
+            const newState = [...prevState];
+            newState.push(searchTerm);
+            return newState;
+          });
         }
         setValue("");
         setIngSuggestions([]);
@@ -88,6 +103,10 @@ export default function SearchIngredients() {
         console.error(error);
       });
     setValue(searchTerm);
+  };
+
+  const onIngredientRemoved = (ingredient: string) => {
+    setChosenIng((prevState) => prevState.filter((ing) => ing !== ingredient));
   };
 
   return (
@@ -193,7 +212,10 @@ export default function SearchIngredients() {
           </Stack>
         </Grid>
         <Grid item xs={12} sx={{ marginTop: 3 }}>
-          <IngredientList ingredients={chosenIng}></IngredientList>
+          <IngredientList
+            ingredients={chosenIng}
+            onIngredientRemoved={onIngredientRemoved}
+          />
         </Grid>
       </Grid>
     </>

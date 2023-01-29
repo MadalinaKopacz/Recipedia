@@ -70,7 +70,11 @@ export default function RecipesList() {
           },
         })
         .then((response) => {
-          setRecipes(response.data.hits);
+          let newRecipes: Recipe[] = [];
+          for (let i = 0; i < response.data.hits.length; i++) {
+            newRecipes.push(response.data.hits[i].recipe);
+          }
+          setRecipes(newRecipes);
         })
         .catch((error) => {
           console.error(error);
@@ -169,10 +173,10 @@ export default function RecipesList() {
       <Grid container spacing={3} sx={{ marginBottom: 10 }}>
         {recipes.map((recipe) => (
           <RecipeCard
-            label={recipe.recipe.label}
-            image={recipe.recipe.image}
-            dishType={recipe.recipe.dishType}
-            categories={recipe.recipe.categories}
+            label={recipe.label}
+            image={recipe.image}
+            dishType={recipe.dishType}
+            categories={recipe.categories}
             recipe={recipe}
           />
         ))}

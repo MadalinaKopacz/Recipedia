@@ -7,8 +7,8 @@ import { Recipe } from "../../DTOs";
 interface RecipeInfo {
   label: string;
   image: string;
-  dishType: [string];
-  categories: [string];
+  dishType: string[];
+  categories: string[];
   recipe: Recipe;
 }
 const style = {
@@ -33,11 +33,23 @@ export default function RecipeCard(props: RecipeInfo) {
   const [isFavorite, setIsFavorite] = useState(false);
   const context = useAuth();
 
+  const handleCardClick = () => {
+    window.open(
+      "/recipe/" +
+        props.recipe.uri.substring(props.recipe.uri.lastIndexOf("_") + 1)
+    );
+  };
+
   useEffect(() => {
     if (context.user?.favorites != null) setFavRecipes(context.user?.favorites);
   }, [context.user?.favorites]);
 
-  const addFavorite = () => {
+  const addFavorite = (e: any) => {
+    if (isFavorite) {
+      return;
+    }
+
+    e.stopPropagation();
     setIsFavorite(true);
     axios
       .post(
@@ -55,7 +67,12 @@ export default function RecipeCard(props: RecipeInfo) {
       });
   };
 
-  const removeFavorite = () => {
+  const removeFavorite = (e: any) => {
+    if (!isFavorite) {
+      return;
+    }
+
+    e.stopPropagation();
     setIsFavorite(false);
     axios
       .post(
@@ -73,7 +90,8 @@ export default function RecipeCard(props: RecipeInfo) {
       });
   };
 
-  const handleFavoriteOnClick = () => {
+  const handleFavoriteOnClick = (e: any) => {
+    e.stopPropagation();
     setOpen(true);
   };
 
@@ -81,7 +99,7 @@ export default function RecipeCard(props: RecipeInfo) {
     if (isFavorite) {
       return (
         <img
-          src="media/favorite-heart-red.svg"
+          src="/media/favorite-heart-red.svg"
           alt="favorite-heart-red"
           onClick={removeFavorite}
         />
@@ -89,7 +107,7 @@ export default function RecipeCard(props: RecipeInfo) {
     } else {
       return (
         <img
-          src="media/not-favorite-heart-red.svg"
+          src="/media/not-favorite-heart-red.svg"
           alt="not-favorite-heart-red"
           onClick={addFavorite}
         />
@@ -99,7 +117,7 @@ export default function RecipeCard(props: RecipeInfo) {
   const handleFavsNotLoggedInUser = () => {
     return (
       <img
-        src="media/not-favorite-heart-red.svg"
+        src="/media/not-favorite-heart-red.svg"
         alt="not-favorite-heart-red"
         onClick={handleFavoriteOnClick}
       />
@@ -113,15 +131,21 @@ export default function RecipeCard(props: RecipeInfo) {
   useEffect(() => {
     if (favRecipes) {
       for (let i = 0; i < favRecipes.length; i++) {
-        if (favRecipes[i].recipe.label === props.recipe.recipe.label) {
+        if (favRecipes[i].uri === props.recipe.uri) {
           setIsFavorite(true);
         }
       }
     }
-  }, [context.token, favRecipes, props.recipe.recipe.label]);
+  }, [context.token, favRecipes, props.recipe.uri]);
 
   return (
-    <Grid item xs={3} textAlign={"center"} minWidth={450}>
+    <Grid
+      item
+      xs={3}
+      textAlign={"center"}
+      minWidth={450}
+      onClick={handleCardClick}
+    >
       <Card
         sx={{
           height: 500,

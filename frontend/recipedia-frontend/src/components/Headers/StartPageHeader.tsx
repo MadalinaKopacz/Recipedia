@@ -68,7 +68,7 @@ function ResponsiveAppBar() {
           Recipedia
         </Typography>
         <img
-          src="media/small-logo.svg"
+          src="/media/small-logo.svg"
           alt="Recipedia logo"
           style={{ width: "3rem" }}
         />

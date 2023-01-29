@@ -1,10 +1,33 @@
 type Recipe = {
-  recipe: {
-    label: string;
-    image: string;
-    dishType: [string];
-    categories: [string];
-  };
+  calories: number;
+  cautions: string[];
+  cuisineType: string[];
+  dietLabels: string[];
+  digest: [];
+  dishType: string[];
+  healthLabels: string[];
+  image: string;
+  images: [];
+  ingredientLines: string[];
+  ingredients: [];
+  label: string;
+  mealType: string[];
+  shareAs: string;
+  source: string;
+  totalDaily: { [key: string]: Nutrient };
+  totalNutrients: { [key: string]: Nutrient };
+  totalTime: number;
+  totalWeigth: number;
+  uri: string;
+  url: string;
+  yeild: number;
+  categories: string[];
+};
+
+type Nutrient = {
+  label: string;
+  quantity: number;
+  unit: string;
 };
 
 type User = {
@@ -18,4 +41,4 @@ type User = {
   email: string;
 };
 
-export type { Recipe, User };
+export type { Recipe, User, Nutrient };

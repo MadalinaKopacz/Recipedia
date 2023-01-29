@@ -12,7 +12,7 @@ export default function LoginPageBody() {
       alignContent="center"
     >
       <img
-        src="media/big-logo.svg"
+        src="/media/big-logo.svg"
         alt="Logo Recipedia"
         height="500"
         style={{

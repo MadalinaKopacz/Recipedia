@@ -19,6 +19,7 @@ import E404Page from "./pages/404Page";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { User } from "./DTOs";
+import RecipePage from "./pages/RecipePage";
 
 const noop = () => {};
 
@@ -154,6 +155,7 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="recipe/:id" element={<RecipePage />} />
           <Route path="*" element={<E404Page />} />
         </Routes>
       </AuthProvider>

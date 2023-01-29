@@ -74,7 +74,7 @@ const E404Page = () => {
         </Fab>
 
         <img
-          src="media/404img.svg"
+          src="/media/404img.svg"
           alt="404 Error"
           style={{
             width: "35rem",

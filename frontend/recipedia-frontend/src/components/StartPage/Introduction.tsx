@@ -14,15 +14,15 @@ import StepCard from "./StepCard";
 
 const itemData = [
   {
-    img: "media/bowl.svg",
+    img: "/media/bowl.svg",
     title: "Bowl",
   },
   {
-    img: "media/write_rect.svg",
+    img: "/media/write_rect.svg",
     title: "Writing",
   },
   {
-    img: "media/cooking.svg",
+    img: "/media/cooking.svg",
     title: "Cooking",
   },
 ];

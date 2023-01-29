@@ -351,10 +351,10 @@ export default function UserProfile() {
                       favRecipes.map((recipe) => (
                         <Grid item xs={9}>
                           <RecipeCard
-                            label={recipe.recipe.label}
-                            image={recipe.recipe.image}
-                            dishType={recipe.recipe.dishType}
-                            categories={recipe.recipe.categories}
+                            label={recipe.label}
+                            image={recipe.image}
+                            dishType={recipe.dishType}
+                            categories={recipe.categories}
                             recipe={recipe}
                           />
                         </Grid>

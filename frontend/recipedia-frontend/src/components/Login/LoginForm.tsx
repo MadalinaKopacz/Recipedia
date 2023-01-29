@@ -34,7 +34,7 @@ export default function LoginForm() {
       })
       .catch((errors) => {
         setErrorMessage(errors.response.data.message);
-        console.log(errors);
+        console.error(errors);
       });
   };
 
