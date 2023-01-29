@@ -214,6 +214,7 @@ export default function UserProfile() {
                       </Grid>
                       <Grid item>
                         <Typography
+                          data-cy="username"
                           sx={{ marginTop: 1, marginLeft: 3, fontSize: 15 }}
                         >
                           Username: {context.user?.username}
@@ -221,6 +222,7 @@ export default function UserProfile() {
                       </Grid>
                       <Grid item>
                         <Typography
+                          data-cy="email"
                           sx={{ marginTop: 1, marginLeft: 3, fontSize: 15 }}
                         >
                           Email: {context.user?.email}

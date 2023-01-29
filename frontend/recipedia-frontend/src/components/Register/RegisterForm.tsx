@@ -326,6 +326,7 @@ export default function RegisterForm() {
               fontSize: "20px",
               fontWeight: 800,
             }}
+            data-cy="submit"
           >
             Register
           </Button>
@@ -347,6 +348,7 @@ export default function RegisterForm() {
                   margin: "auto",
                   fontSize: "0.8rem",
                 }}
+                data-cy="error-msg"
               >
                 {errorMessage}
               </Typography>

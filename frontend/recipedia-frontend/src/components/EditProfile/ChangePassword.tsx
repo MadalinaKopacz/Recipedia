@@ -129,7 +129,7 @@ export default function ChangePassword() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button id="change-pass" variant="outlined" onClick={handleClickOpen}>
         Change Password
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -286,14 +286,15 @@ export default function ChangePassword() {
                 margin: "auto",
                 fontSize: "0.8rem",
               }}
+              data-cy="error-msg"
             >
               {errorMessage || <br />}
             </Typography>
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Done</Button>
+          <Button id="btn-cancel" onClick={handleClose}>Cancel</Button>
+          <Button id="btn-done" onClick={handleSubmit}>Done</Button>
         </DialogActions>
       </Dialog>
     </div>
