@@ -109,7 +109,7 @@ export default function EditProfile() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button id="btn-edit-profile" variant="outlined" onClick={handleClickOpen}>
         Edit Profile
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -118,7 +118,7 @@ export default function EditProfile() {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="fname"
             label="First name"
             type="text"
             fullWidth
@@ -129,7 +129,7 @@ export default function EditProfile() {
 
           <TextField
             margin="dense"
-            id="name"
+            id="lname"
             label="Last name"
             type="text"
             fullWidth
@@ -139,7 +139,7 @@ export default function EditProfile() {
           />
           <TextField
             margin="dense"
-            id="name"
+            id="username"
             label="Username"
             type="text"
             fullWidth
@@ -149,7 +149,7 @@ export default function EditProfile() {
           />
           <TextField
             margin="dense"
-            id="name"
+            id="email"
             label="Email"
             type="email"
             fullWidth
@@ -205,21 +205,20 @@ export default function EditProfile() {
                 <PhotoCamera />
               </IconButton>
               {profilepicURL && profilepic && (
-                <IconButton onClick={handleRemovePhoto}>
+                <IconButton id="rmv-pic" onClick={handleRemovePhoto}>
                   <ClearIcon />
                 </IconButton>
               )}
             </Box>
             <Avatar
-              alt="Remy Sharp"
               sx={{ width: 120, height: 120 }}
               src={profilepicURL}
             />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Done</Button>
+          <Button id="btn-cancel" onClick={handleClose}>Cancel</Button>
+          <Button id="btn-save" onClick={handleSubmit}>Done</Button>
         </DialogActions>
         <Box height={"1rem"} display="flex" alignItems="center" padding="10px">
           {errorMessage !== "" && (
@@ -233,6 +232,7 @@ export default function EditProfile() {
                 margin: "auto",
                 fontSize: "0.8rem",
               }}
+              data-cy="error-msg"
             >
               {errorMessage}
             </Typography>

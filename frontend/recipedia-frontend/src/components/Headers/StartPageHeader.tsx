@@ -111,6 +111,7 @@ function ResponsiveAppBar() {
                   fontWeight: "bold",
                   marginRight: 30,
                 }}
+                id="login"
               >
                 Log In
               </Button>
@@ -132,6 +133,7 @@ function ResponsiveAppBar() {
                   fontWeight: "bold",
                   marginRight: 30,
                 }}
+                id="register"
               >
                 Register
               </Button>
@@ -155,6 +157,7 @@ function ResponsiveAppBar() {
                   fontWeight: "bold",
                   marginRight: 30,
                 }}
+                id="welcome-msg"
               >
                 Hello,{" "}
                 <span style={{ color: "#DD0426" }}>
@@ -178,6 +181,7 @@ function ResponsiveAppBar() {
                   fontWeight: "bold",
                   marginRight: 30,
                 }}
+                id="btn-profile"
               >
                 Your profile
               </Button>

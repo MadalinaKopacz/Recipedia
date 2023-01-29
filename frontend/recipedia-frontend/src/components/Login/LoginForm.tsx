@@ -13,14 +13,12 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../App";
 
 export default function LoginForm() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const context = useAuth();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -85,7 +83,7 @@ export default function LoginForm() {
           <Input
             required
             id="username"
-            placeholder="Your username/email"
+            placeholder="Your username"
             fullWidth={true}
             onChange={(e) => setUsername(e.target.value)}
             value={username}
@@ -141,6 +139,7 @@ export default function LoginForm() {
             fontSize: "20px",
             fontWeight: 800,
           }}
+          data-cy="submit"
         >
           Login
         </Button>
@@ -159,6 +158,7 @@ export default function LoginForm() {
                 marginBottom: "-2.5rem",
                 width: "65%",
               }}
+              data-cy="error-msg"
             >
               {errorMessage}
             </Typography>

@@ -58,7 +58,7 @@ export default function DeleteAccount() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button id="btn-del" variant="outlined" onClick={handleClickOpen}>
         Delete Account
       </Button>
       <Modal open={open} onClose={handleClose}>
@@ -95,6 +95,7 @@ export default function DeleteAccount() {
               }}
               onClick={handleDelete}
               variant="outlined"
+              id="acc-del"
             >
               Yes
             </Button>
