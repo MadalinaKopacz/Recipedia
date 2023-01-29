@@ -27,9 +27,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "env-cmd -f .env react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "tests": "cypress open"
+    "start:api": "cd ../../backend/recipedia/ && python manage.py migrate && PYTHONUNBUFFERED=1 python manage.py runserver 127.0.0.1:8000 --noreload",
+    "start:app": "BROWSER=none react-scripts start | cat",
+    "test:start-app": "start-server-and-test --expect 404 start:api http-get://127.0.0.1:8000 start:app",
+    "test": "start-server-and-test test:start-app http://127.0.0.1:3000 test:cypress",
+    "test:react-scripts": "react-scripts test",
+    "test:cypress": "cypress run",
+    "eject": "react-scripts eject"
   },
   "proxy": "https://api.edamam.com",
   "eslintConfig": {
@@ -52,6 +56,8 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
-    "cypress": "^12.4.0"
+    "cypress": "^12.4.0",
+    "env-cmd": "^10.1.0",
+    "start-server-and-test": "^1.15.3"
   }
 }
