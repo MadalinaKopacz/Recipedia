@@ -1,7 +1,8 @@
-import { Typography, Box, Grid, Button, TextField } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import qs from "qs";
-import React, { useState, useEffect, useCallback, useContext } from "react";
+
 import { useAuth } from "../../App";
 import { Recipe } from "../../DTOs";
 import ENV from "../../env";
@@ -9,10 +10,6 @@ import RecipeCard from "./RecipeCard";
 
 export default function RecipesList() {
   const [value, setValue] = useState("");
-  const [recipesSuggestions, setRecipesSuggestions] = useState<string[]>([]);
-  const [chosenRecipe, setChosenRecipe] = useState<string[]>([]);
-  const [unknownRecipe, setUnknownRecipe] = useState<boolean>(false);
-  const numberOfSuggestions: Number = 5;
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const context = useAuth();
 
@@ -21,45 +18,19 @@ export default function RecipesList() {
       if (!ENV.BASE_RECIPE_URL) {
         return;
       }
-      let params = {};
-      if (context.user) {
-        if (context.user.preference_diet && context.user.preference_health) {
-          params = {
-            type: "any",
-            q: q,
-            app_id: ENV.RECIPE_SEARCH_APP_ID,
-            app_key: ENV.RECIPE_SEARCH_APP_KEY,
-            health: context.user.preference_health,
-            diet: context.user.preference_diet,
-            random: "true",
-          };
-        } else if (context.user.preference_diet) {
-          params = {
-            type: "any",
-            q: q,
-            app_id: ENV.RECIPE_SEARCH_APP_ID,
-            app_key: ENV.RECIPE_SEARCH_APP_KEY,
-            diet: context.user.preference_diet,
-            random: "true",
-          };
-        } else if (context.user.preference_health) {
-          params = {
-            type: "any",
-            q: q,
-            app_id: ENV.RECIPE_SEARCH_APP_ID,
-            app_key: ENV.RECIPE_SEARCH_APP_KEY,
-            health: context.user.preference_health,
-            random: "true",
-          };
-        }
-      } else {
-        params = {
-          type: "any",
-          q: q,
-          app_id: ENV.RECIPE_SEARCH_APP_ID,
-          app_key: ENV.RECIPE_SEARCH_APP_KEY,
-          random: "true",
-        };
+
+      const params: { [key: string]: any } = {
+        type: "any",
+        q: q,
+        app_id: ENV.RECIPE_SEARCH_APP_ID,
+        app_key: ENV.RECIPE_SEARCH_APP_KEY,
+        random: "true",
+      };
+      if (context.user?.preference_diet) {
+        params.diet = context.user.preference_diet;
+      }
+      if (context.user?.preference_health) {
+        params.health = context.user.preference_health;
       }
 
       axios
@@ -90,6 +61,7 @@ export default function RecipesList() {
   if (!recipes) {
     return null;
   }
+
   return (
     <>
       <Box

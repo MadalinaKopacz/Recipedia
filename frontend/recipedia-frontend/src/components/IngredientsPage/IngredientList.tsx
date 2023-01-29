@@ -27,45 +27,19 @@ export default function SearchIngredients({
     if (!ENV.BASE_RECIPE_URL) {
       return;
     }
-    let params = {};
-    if (context.user) {
-      if (context.user.preference_diet && context.user.preference_health) {
-        params = {
-          type: "any",
-          q: q,
-          app_id: ENV.RECIPE_SEARCH_APP_ID,
-          app_key: ENV.RECIPE_SEARCH_APP_KEY,
-          health: context.user.preference_health,
-          diet: context.user.preference_diet,
-          random: "true",
-        };
-      } else if (context.user.preference_diet) {
-        params = {
-          type: "any",
-          q: q,
-          app_id: ENV.RECIPE_SEARCH_APP_ID,
-          app_key: ENV.RECIPE_SEARCH_APP_KEY,
-          diet: context.user.preference_diet,
-          random: "true",
-        };
-      } else if (context.user.preference_health) {
-        params = {
-          type: "any",
-          q: q,
-          app_id: ENV.RECIPE_SEARCH_APP_ID,
-          app_key: ENV.RECIPE_SEARCH_APP_KEY,
-          health: context.user.preference_health,
-          random: "true",
-        };
-      }
-    } else {
-      params = {
-        type: "any",
-        q: q,
-        app_id: ENV.RECIPE_SEARCH_APP_ID,
-        app_key: ENV.RECIPE_SEARCH_APP_KEY,
-        random: "true",
-      };
+
+    const params: { [key: string]: any } = {
+      type: "any",
+      q: q,
+      app_id: ENV.RECIPE_SEARCH_APP_ID,
+      app_key: ENV.RECIPE_SEARCH_APP_KEY,
+      random: "true",
+    };
+    if (context.user?.preference_diet) {
+      params.diet = context.user.preference_diet;
+    }
+    if (context.user?.preference_health) {
+      params.health = context.user.preference_health;
     }
 
     axios

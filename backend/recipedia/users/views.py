@@ -305,15 +305,15 @@ def edit_favorites(request):
             },
             status=400,
         )
-    found = False
+    found = None
     for recipe in favorites:
         if recipe["uri"] == info["recipe"]["uri"]:
-            found = True
+            found = recipe
             break
     if info["command"] == "add" and not found:
         favorites.append(info["recipe"])
     elif info["command"] == "remove" and found:
-        favorites.remove(info["recipe"])
+        favorites.remove(found)
 
     user.favorites = favorites
     user.save()

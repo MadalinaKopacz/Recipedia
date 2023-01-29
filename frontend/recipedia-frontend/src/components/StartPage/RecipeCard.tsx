@@ -124,7 +124,8 @@ export default function RecipeCard(props: RecipeInfo) {
     );
   };
 
-  const handleClose = () => {
+  const handleClose = (e: any) => {
+    e.stopPropagation();
     setOpen(false);
   };
 
@@ -218,8 +219,25 @@ export default function RecipeCard(props: RecipeInfo) {
               <Modal open={open} onClose={handleClose}>
                 <Box sx={style}>
                   <Typography sx={{ fontFamily: "Playfair" }}>
-                    To add favorites, please <Link href="/login">log in</Link>{" "}
-                    or <Link href="/register">register</Link>.
+                    To add favorites, please{" "}
+                    <Link
+                      href="/login"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      log in
+                    </Link>{" "}
+                    or{" "}
+                    <Link
+                      href="/register"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      register
+                    </Link>
+                    .
                   </Typography>
                 </Box>
               </Modal>
