@@ -355,6 +355,18 @@ export default function RegisterForm() {
             )}
           </Box>
         </Box>
+        <Typography
+          sx={{
+            fontFamily: "Playfair",
+            fontWeight: 700,
+            textDecoration: "none",
+            alignText: "center",
+            fontSize: "0.8rem",
+          }}
+        >
+          By creating an account, you give your consent for us to process your
+          personal data according to GDPR laws.
+        </Typography>
       </Box>
     </Box>
   );
