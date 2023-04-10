@@ -51,11 +51,9 @@ jobs:
           npm ci
       
       - name: Cypress run
-        working-directory: ./frontend/recipedia-frontend
-        uses: cypress-io/github-action@v5
-        with:
-          record: true
-          start: npm start
+        run: |
+          cd ./frontend/recipedia-frontend
+          npx cypress run --browser chrome --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
 
       # - name: Run backend tests
       #   run: |
