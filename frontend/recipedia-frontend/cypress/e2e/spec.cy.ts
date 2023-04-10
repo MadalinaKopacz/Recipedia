@@ -1,7 +1,7 @@
 describe('template spec', () => {
   it('app flow', () => {
     cy.viewport(1920, 1080)
-    cy.visit('http://localhost:3000/')
+    cy.visit('/')
     cy.get('#register').click()
 
     cy.get('#firstname').type('Firstname')
