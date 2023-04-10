@@ -1,6 +1,7 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
+  projectId: "42rqp7",
   component: {
     devServer: {
       framework: "create-react-app",
@@ -13,4 +14,6 @@ export default defineConfig({
       // implement node event listeners here
     },
   },
+
+  video: true
 });

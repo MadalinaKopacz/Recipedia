@@ -6,8 +6,8 @@ describe('template spec', () => {
 
     cy.get('#firstname').type('Firstname')
     cy.get('#lastname').type('Lastname')
-    cy.get('#username').type('testusernameforhammy')
-    cy.get('#email').type('testemailforhammy@mail.com')
+    cy.get('#username').type('testusernameforhammy1')
+    cy.get('#email').type('testemailforhammy1@mail.com')
     cy.get('#password1').type('Parola123')
     cy.get('#password2').type('Parola123')
 
@@ -16,7 +16,7 @@ describe('template spec', () => {
     cy.url().should('include', '/login') // user should have been redirected to login
 
 
-    cy.get('#username').type('testusernameforhammy')
+    cy.get('#username').type('testusernameforhammy1')
     cy.get('#password').type('Parola123')
     cy.get('[data-cy=submit]').click()
     cy.get('#welcome-msg').should('exist')
