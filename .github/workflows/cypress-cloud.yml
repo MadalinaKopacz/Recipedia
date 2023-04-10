@@ -53,7 +53,7 @@ jobs:
       - name: Cypress run
         run: |
           cd ./frontend/recipedia-frontend
-          npm run test
+          npm run cloud
         env:
           CYPRESS_baseUrl: http://localhost:3000
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

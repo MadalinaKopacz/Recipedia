@@ -31,8 +31,10 @@
     "start:app": "BROWSER=none react-scripts start | cat",
     "test:start-app": "start-server-and-test --expect 404 start:api http-get://127.0.0.1:8000 start:app",
     "test": "start-server-and-test test:start-app http://127.0.0.1:3000 test:cypress",
+    "cloud": "start-server-and-test test:start-app http://127.0.0.1:3000 cloud:cypress",
     "test:react-scripts": "react-scripts test",
     "test:cypress": "cypress run",
+    "cloud:cypress": "cypress run --record",
     "eject": "react-scripts eject"
   },
   "proxy": "https://api.edamam.com",
