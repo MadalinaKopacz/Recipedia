@@ -7,13 +7,63 @@ on:
 
 jobs:
   build:
+    environment: Recipedia
+    env:
+      RECIPE_SEARCH_APP_ID: ${{ secrets.RECIPE_SEARCH_APP_ID}}
+      RECIPE_SEARCH_APP_KEY: ${{ secrets.RECIPE_SEARCH_APP_KEY}}
+      FOOD_APP_ID: ${{ secrets.FOOD_APP_ID }}
+      FOOD_APP_KEY: ${{ secrets.FOOD_APP_KEY }}
+      BASE_URL: ${{ secrets.BASE_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      BASE_FOOD_URL: ${{ secrets.BASE_FOOD_URL }}
+      REACT_APP_RECIPE_SEARCH_APP_ID: ${{ secrets.RECIPE_SEARCH_APP_ID}}
+      REACT_APP_RECIPE_SEARCH_APP_KEY: ${{ secrets.RECIPE_SEARCH_APP_KEY}}
+      REACT_APP_FOOD_APP_ID: ${{ secrets.FOOD_APP_ID }}
+      REACT_APP_FOOD_APP_KEY: ${{ secrets.FOOD_APP_KEY }}
+      REACT_APP_BASE_RECIPE_URL: ${{ secrets.BASE_URL }}
+      REACT_APP_SECRET_KEY=: ${{ secrets.SECRET_KEY }}
+      REACT_APP_BASE_FOOD_URL: ${{ secrets.BASE_FOOD_URL }}
+
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: npm install
+      - uses: actions/checkout@v3
+
+      - name: Use Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install backend dependencies
+        run: |
+          cd ./backend/recipedia
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install frontend dependencies
+        run: |
+          cd ./frontend/recipedia-frontend
+          npm ci
+      
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           record: true
           start: npm start
+
+      # - name: Run backend tests
+      #   run: |
+      #     cd ./backend/recipedia
+      #     python manage.py test
+
+      # - name: Run frontend tests
+      #   run: |
+      #     cd ./frontend/recipedia-frontend
+      #     npm run test
+      #   env:
+      #     TERM: xterm
