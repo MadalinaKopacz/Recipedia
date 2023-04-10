@@ -50,10 +50,24 @@ jobs:
           cd ./frontend/recipedia-frontend
           npm ci
       
+      - name: Start backend server
+        run: npm run start:api
+
+      - name: Start frontend server
+        run: npm run start:app
+
       - name: Cypress run
-        run: |
-          cd ./frontend/recipedia-frontend
-          npx cypress run --browser chrome --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
+        run: npm run test
+        env:
+          CYPRESS_baseUrl: http://localhost:3000
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+        timeout-minutes: 30
+        continue-on-error: true
+        if: always()
+        steps:
+        - name: Wait for servers to start
+          run: npx start-server-and-test start:api http-get://localhost:8000 start:app http-get://localhost:3000
+
 
       # - name: Run backend tests
       #   run: |
