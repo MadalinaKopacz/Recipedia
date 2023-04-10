@@ -8,16 +8,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: npm install
       - name: Cypress run
-        env:
-            CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
         uses: cypress-io/github-action@v5
         with:
-          browser: chrome
-          build: npm run build
+          record: true
           start: npm start
