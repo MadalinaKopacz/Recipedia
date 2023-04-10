@@ -51,11 +51,11 @@ jobs:
           npm ci
       
       - name: Cypress run
+        working-directory: ./frontend/recipedia-frontend
         uses: cypress-io/github-action@v5
         with:
           record: true
           start: npm start
-        working-directory: ./frontend/recipedia-frontend
 
       # - name: Run backend tests
       #   run: |
