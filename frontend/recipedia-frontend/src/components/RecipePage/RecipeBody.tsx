@@ -22,6 +22,7 @@ export default function RecipeBody({ recipe }: RecipeInfo) {
         borderRadius: 10,
         paddingBottom: 1,
       }}
+      data-cy="recipe-body"
     >
       <RecipeIntro recipe={recipe} />
       <RecipeDetails recipe={recipe} />

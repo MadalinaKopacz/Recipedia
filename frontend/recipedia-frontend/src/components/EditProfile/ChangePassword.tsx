@@ -129,10 +129,10 @@ export default function ChangePassword() {
 
   return (
     <div>
-      <Button id="change-pass" variant="outlined" onClick={handleClickOpen}>
+      <Button id="change-pass" variant="outlined" onClick={handleClickOpen} data-cy="change-pass-btn">
         Change Password
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} data-cy="change-pass-dialog">
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
           <FormControl sx={{ m: 1, width: "55ch" }} variant="standard">
@@ -178,6 +178,7 @@ export default function ChangePassword() {
                 margin: "auto",
                 fontSize: "0.8rem",
               }}
+              data-cy="error-msg1"
             >
               {errorMessage1 || <br />}
             </Typography>
@@ -224,6 +225,7 @@ export default function ChangePassword() {
                 margin: "auto",
                 fontSize: "0.8rem",
               }}
+              data-cy="error-msg2"
             >
               {errorMessage2 || <br />}
             </Typography>
@@ -271,6 +273,7 @@ export default function ChangePassword() {
                 margin: "auto",
                 fontSize: "0.8rem",
               }}
+              data-cy="error-msg3"
             >
               {errorMessage3 || <br />}
             </Typography>
@@ -293,8 +296,8 @@ export default function ChangePassword() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button id="btn-cancel" onClick={handleClose}>Cancel</Button>
-          <Button id="btn-done" onClick={handleSubmit}>Done</Button>
+          <Button id="btn-cancel" onClick={handleClose} data-cy="cancel-btn">Cancel</Button>
+          <Button id="btn-done" onClick={handleSubmit} data-cy="done-btn">Done</Button>
         </DialogActions>
       </Dialog>
     </div>

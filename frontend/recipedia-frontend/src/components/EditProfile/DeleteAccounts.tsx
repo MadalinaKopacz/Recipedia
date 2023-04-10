@@ -96,6 +96,8 @@ export default function DeleteAccount() {
               onClick={handleDelete}
               variant="outlined"
               id="acc-del"
+              data-cy="yes-button"
+
             >
               Yes
             </Button>
@@ -114,6 +116,7 @@ export default function DeleteAccount() {
               }}
               onClick={handleClose}
               variant="contained"
+              data-cy="no-button"
             >
               No
             </Button>

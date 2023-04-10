@@ -168,6 +168,7 @@ export default function UserProfile() {
                         width: 150,
                         boxShadow: 1,
                       }}
+                      data-cy="avatar"
                     />
                   </Grid>
                   <Grid item>
@@ -177,6 +178,7 @@ export default function UserProfile() {
                         fontSize: 25,
                         textDecoration: "underline",
                       }}
+                      data-cy="nume-prenume"
                     >
                       {context.user?.first_name + " " + context.user?.last_name}
                     </Typography>
@@ -230,13 +232,13 @@ export default function UserProfile() {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item sx={{ marginTop: 18 }}>
+                  <Grid item data-cy="edit-profile" sx={{ marginTop: 18 }}>
                     <EditProfile />
                   </Grid>
-                  <Grid item sx={{ marginTop: 1.5 }}>
+                  <Grid item data-cy="change-password" sx={{ marginTop: 1.5 }}>
                     <ChangePassword />
                   </Grid>
-                  <Grid item sx={{ marginTop: 1.5 }}>
+                  <Grid item data-cy="delete-account" sx={{ marginTop: 1.5 }}>
                     <DeleteAccount />
                   </Grid>
                 </Grid>
@@ -253,12 +255,14 @@ export default function UserProfile() {
                 <Grid item sx={{ marginTop: 5.5 }}>
                   <Typography
                     sx={{ fontSize: 25, fontWeight: "bold", marginLeft: 4 }}
+                    data-cy="health-pref"
                   >
-                    Health preferences
+                    Health Preferences
                   </Typography>
                 </Grid>
                 <Grid item sx={{}}>
                   <Autocomplete
+                    data-cy="autocomplete-health"
                     multiple
                     id="tags-filled"
                     options={healthPrefs.map((option) => option)}
@@ -271,6 +275,7 @@ export default function UserProfile() {
                     renderTags={(healthTags: readonly string[], getTagProps) =>
                       healthTags.map((option: string, index: number) => (
                         <Chip
+                          data-cy="chip-health"
                           variant="outlined"
                           id="healthTags"
                           label={option}
@@ -289,6 +294,7 @@ export default function UserProfile() {
                 </Grid>
                 <Grid item sx={{ marginTop: 5.5 }}>
                   <Typography
+                    data-cy="diet-pref"
                     sx={{ fontSize: 25, fontWeight: "bold", marginLeft: 4 }}
                   >
                     Diet Preferences
@@ -296,6 +302,7 @@ export default function UserProfile() {
                 </Grid>
                 <Grid item sx={{}}>
                   <Autocomplete
+                    data-cy="autocomplete-diet"
                     multiple
                     id="tags-filled"
                     options={dietPrefs.map((option) => option)}
@@ -308,6 +315,7 @@ export default function UserProfile() {
                     renderTags={(dietTags: string[], getTagProps) =>
                       dietTags.map((option: string, index: number) => (
                         <Chip
+                          data-cy="chip-diets"
                           variant="outlined"
                           id="dietTags"
                           label={option}
@@ -328,12 +336,13 @@ export default function UserProfile() {
                   item
                   sx={{ marginLeft: "auto", marginRight: 3, marginTop: 3 }}
                 >
-                  <Button variant="contained" onClick={savePrefs}>
+                  <Button data-cy="save" variant="contained" onClick={savePrefs}>
                     Save
                   </Button>
                 </Grid>
                 <Grid item sx={{}}>
                   <Typography
+                    data-cy="favorites-text"
                     sx={{ fontSize: 25, fontWeight: "bold", marginLeft: 4 }}
                   >
                     Favorites

@@ -112,7 +112,7 @@ export default function EditProfile() {
       <Button id="btn-edit-profile" variant="outlined" onClick={handleClickOpen}>
         Edit Profile
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} data-cy="dialog">
         <DialogTitle>Edit Profile</DialogTitle>
         <DialogContent>
           <TextField

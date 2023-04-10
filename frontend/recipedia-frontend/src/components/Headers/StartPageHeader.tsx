@@ -112,6 +112,7 @@ function ResponsiveAppBar() {
                   marginRight: 30,
                 }}
                 id="login"
+                data-cy="login-button"
               >
                 Log In
               </Button>

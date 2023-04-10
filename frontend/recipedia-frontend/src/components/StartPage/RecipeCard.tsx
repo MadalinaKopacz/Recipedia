@@ -36,7 +36,7 @@ export default function RecipeCard(props: RecipeInfo) {
   const handleCardClick = () => {
     window.open(
       "/recipe/" +
-        props.recipe.uri.substring(props.recipe.uri.lastIndexOf("_") + 1)
+      props.recipe.uri.substring(props.recipe.uri.lastIndexOf("_") + 1)
     );
   };
 
@@ -61,7 +61,7 @@ export default function RecipeCard(props: RecipeInfo) {
           },
         }
       )
-      .then((resp) => {})
+      .then((resp) => { })
       .catch((error) => {
         console.error(error);
       });
@@ -84,7 +84,7 @@ export default function RecipeCard(props: RecipeInfo) {
           },
         }
       )
-      .then((resp) => {})
+      .then((resp) => { })
       .catch((error) => {
         console.error(error);
       });
@@ -146,6 +146,9 @@ export default function RecipeCard(props: RecipeInfo) {
       textAlign={"center"}
       minWidth={450}
       onClick={handleCardClick}
+      data-cy="recipe-card"
+      data-uri={props.recipe.uri}
+
     >
       <Card
         sx={{

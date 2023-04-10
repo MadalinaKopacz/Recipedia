@@ -3,15 +3,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import RegisterForm from './RegisterForm'
 
 describe('RegisterForm component', () => {
-    beforeEach(() => {
-      // render before tests
-      cy.viewport(1920, 1080)
-      cy.mount(
-        <Router>
-          <RegisterForm />
-        </Router>
-      );
-    }),
+  beforeEach(() => {
+    // render before tests
+    cy.viewport(1920, 1080)
+    cy.mount(
+      <Router>
+        <RegisterForm />
+      </Router>
+    );
+  }),
     it('Check fields initialization', () => {
       cy.get('#firstname').should('have.text', '')
       cy.get('#firstname').should('have.attr', 'required')
@@ -53,7 +53,7 @@ describe('RegisterForm component', () => {
       cy.get('[data-cy=error-msg').should('have.text', "Email is incorrect.")
 
       cy.get('#email').clear()
-      cy.get('#email').type('email@mail')
+      cy.get('#email').type('emailmail')
       cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=error-msg').should('have.text', "Email is incorrect.")
 
