@@ -64,9 +64,6 @@ jobs:
         timeout-minutes: 30
         continue-on-error: true
         if: always()
-        steps:
-        - name: Wait for servers to start
-          run: npx start-server-and-test start:api http-get://localhost:8000 start:app http-get://localhost:3000
 
 
       # - name: Run backend tests
