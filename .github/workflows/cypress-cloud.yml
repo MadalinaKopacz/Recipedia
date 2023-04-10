@@ -55,6 +55,7 @@ jobs:
         with:
           record: true
           start: npm start
+        working-directory: ./frontend/recipedia-frontend
 
       # - name: Run backend tests
       #   run: |
