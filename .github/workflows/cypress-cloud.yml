@@ -49,12 +49,6 @@ jobs:
         run: |
           cd ./frontend/recipedia-frontend
           npm ci
-      
-      - name: Start backend server
-        run: npm run start:api
-
-      - name: Start frontend server
-        run: npm run start:app
 
       - name: Cypress run
         run: npm run test
