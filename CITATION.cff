@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+authors:
+  - family-names: Kopacz
+    given-names: Madalina
+  - family-names: Negrut
+    given-names: Daniela
+  - family-names: Nastase
+    given-names: Matei
+  - family-names: Soare
+    given-names: Dennis
+title: "Recipedia"
+url: "https://github.com/NMDMaria/Recipedia"
